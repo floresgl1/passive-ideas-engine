@@ -183,12 +183,81 @@ protects the whole system:
 - **Direction & Intent** — a stated goal or "want to build X", NOT proof.
   Keep quarantined, structurally separate from Skills.
 
+## Step 2.1 — Draft a career-log record for every shipped-tier movement
+
+The moment you write a change into `[emerging]` or `[strong]`, something became
+claimable that wasn't. Draft its `career-log.md` record NOW, while you are still
+holding the repo — not later, from memory.
+
+**An event is any movement INTO or WITHIN the shipped tiers:**
+- `—` → `[emerging]`/`[strong]` — first entry from nothing. If the axis had zero
+  shipped inventory before this, that is the keystone being crossed; say so in
+  the record's evidence.
+- `[conceptual]` → `[emerging]`/`[strong]`
+- `Direction & Intent` → `[emerging]`/`[strong]` (the Step 3 graduations)
+- `[emerging]` → `[strong]`
+
+**NOT events:** a new `[conceptual]` entry, or a new `Direction & Intent` line.
+Nothing shipped, so nothing is claimable. Draft no record for them.
+
+**Record the actual endpoints of THIS RUN's transition** — the tier the item
+stood at when the run began, and the tier it stands at now. If something moves
+`[conceptual]` → `[strong]` in a single run, that is ONE record reading
+`[conceptual] → [strong]`. Never split it into a passage through `[emerging]`:
+the item never occupied that tier, `career-log.md` is append-only, and a
+synthesized intermediate is a permanent record of a state that never existed.
+
+Draft each record in exactly this shape:
+
+```
+## YYYY-MM-DD — <artifact>
+- axis: <capability axis, e.g. hardware>
+- transition: [tier] → [tier]
+- artifact: <repo or artifact name>
+- evidence: <concrete signals — see below>
+```
+
+**The evidence field is the whole record.** A separate command generates résumé
+and LinkedIn text from these records and may claim ONLY what `evidence`
+literally supports. It cannot open the repo, and it cannot use anything you left
+out. `career-log.md` is append-only, so **whatever you omit here is unclaimable
+forever.** Capture each of these that exists:
+
+- **language / stack** — without it, no future line can name the language.
+- **commit count and range.**
+- **test results** — or the explicit negative `no tests`. The negative is real
+  information: it forecloses a claim rather than leaving one available.
+- **design artifact** — a design doc, decision record, or contract written
+  before the implementing commit, if there is one.
+- **deployment / users / traffic** — the only thing that ever licenses
+  "production" in an outward claim.
+
+Write concrete signals, never adjectives. `14 tests green, PSpice cross-check
+within 1%` is evidence. `Robust and well-tested` is not, and will be refused
+downstream.
+
+There is deliberately **no `competence` field**. A quiz verdict in `ideas/`
+measures whether an idea's mechanism could be reconstructed from memory — it is
+not shipped work and must never reach an outward claim. Do not add the field,
+and do not let a competence label influence a tier (Step 0.5).
+
+**Hold the drafted records. Do not write to `career-log.md` yet** — they are
+appended in Step 5, in the same commit as the `profile.md` edit that justifies
+them.
+
 ## Step 3 — Graduations (check every time)
 Look for items in `Direction & Intent` that newly-shipped work now PROVES. If
 an aspiration has become a shipped artifact, MOVE it out of quarantine into
 Skills at the right tier. This is the most valuable update you can make —
 especially any hardware/keystone line graduating from [conceptual] to [strong].
 Flag each graduation explicitly.
+
+A graduation that lands in `[emerging]` or `[strong]` is an event: draft its
+record under Step 2.1, at the moment you make the move, with evidence captured
+live. Graduations are where the highest-value records in this file originate —
+they are the transitions the whole engine is weighted to produce. In the rare
+case an intent moves only as far as `[conceptual]`, nothing shipped, so draft no
+record.
 
 ## Step 4 — Preserve invariants
 - Keep the epistemic through-line as ONE [strong] skill with its META-SKILL
@@ -200,9 +269,40 @@ Flag each graduation explicitly.
 - Keep `## Trajectory` a true 2–3 sentence read of current direction.
 - Do NOT delete demonstrated skills that didn't change this week.
 
-## Step 5 — Write back state
-Set `## last_refresh` to today's date (YYYY-MM-DD). Commit the updated
-profile.md.
+## Step 5 — Write back state and commit (ONE commit)
+
+Do all three as a single commit:
+
+1. **Append the records drafted in Steps 2.1 and 3** to the END of
+   `career-log.md`, verbatim, in date order. Never edit, reword, reorder, or
+   delete an existing record, and never reformat the file.
+2. Set `## last_refresh` in `profile.md` to today's date (YYYY-MM-DD).
+3. Commit `profile.md` and `career-log.md` **together, in one commit.**
+
+**You may not author a record in this step.** You append what Steps 2.1 and 3
+emitted while making the edits, or you append nothing. If no shipped-tier
+movement happened this run, `career-log.md` is left untouched — that is the
+normal case, not a failure, and a quiet week must never produce a record.
+
+The append and the profile write are one step and one commit for a reason: every
+record is committed alongside the `profile.md` edit that justifies it, so
+`git show` on that commit displays the tier change and the record together. A
+record that arrived without a tier edit is visible as such, permanently.
+
+**Name every appended transition in the commit message.** Subject line as usual,
+then one line per record:
+
+```
+Weekly refresh: <short summary>
+
+career-log: <artifact> [tier] → [tier]
+career-log: <artifact> [tier] → [tier]
+```
+
+If you appended nothing, write `career-log: no records` explicitly — the absence
+should be stated, not inferred from silence. Naming the transitions makes the
+record ↔ tier-edit pairing readable from `git log` alone, without opening a
+diff. An audit nobody performs is not an audit.
 
 ================================================================
 ## PART C — Quiz Queue Health
@@ -244,6 +344,14 @@ Structure it in two short sections:
 - What changed, what tier each change landed in, any graduations (especially a
   hardware line moving [conceptual] → [strong], called out clearly), and any
   duplicates collapsed. If nothing substantive changed, say exactly that.
+- **Career log** — the NUMBER of records appended to `career-log.md`, and each
+  transition named, or the words "no records appended".
+
+  This count must match the shipped-tier movements and graduations you just
+  reported. If it does not, say so plainly in the post rather than reconciling
+  it silently. A mismatch between what you flagged and what you logged is the
+  one discrepancy that must never pass unnoticed — this routine runs unattended,
+  so a failure that stays quiet is a failure that persists.
 
 Keep the whole message readable in one Discord message. Do NOT include queue
 counts here — those go to the quiz channel.
@@ -282,4 +390,4 @@ found by reading both side by side. Echoing the marker makes any future
 divergence self-announcing: if a run's marker doesn't match the marker in the
 repo copy, the payload is stale. No audit required to notice.
 
-<!-- prompt-version: 2026-08-04.1 -->
+<!-- prompt-version: 2026-08-04.2 -->

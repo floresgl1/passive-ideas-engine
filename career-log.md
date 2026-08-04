@@ -40,6 +40,12 @@ to land in.
 
 Records are chronological, oldest first, newest appended at the end.
 
+**This log starts on 2026-08-04.** Transitions that happened before it existed
+are not here and must not be backfilled — a record written now would have no
+`profile.md` edit beside it in any commit, which is exactly the unearned record
+the same-commit rule exists to expose. The three pre-existing graduations remain
+noted inline in `profile.md`'s Skills section, and their history is in git.
+
 ---
 
 *No records yet. The first will be appended by PART B on the next weekly run
