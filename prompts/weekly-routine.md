@@ -14,10 +14,10 @@
 > The daily routine writes idea files to `main`; if this routine reads or writes
 > any other branch, PART A will see an empty `ideas/` folder and the loop breaks.
 
-> **WRITE SCOPE (critical):** The only files you may write are `profile.md` and
-> a GitHub issue. You must NEVER modify, rewrite, or reformat any file in
-> `ideas/`. Those files carry quiz results written by another routine; editing
-> them destroys measurements that cannot be recovered.
+> **WRITE SCOPE (critical):** The only files you may write are `profile.md`,
+> `career-log.md`, and a GitHub issue. You must NEVER modify, rewrite, or
+> reformat any file in `ideas/`. Those files carry quiz results written by
+> another routine; editing them destroys measurements that cannot be recovered.
 
 This routine does THREE jobs in one run, in this order:
   PART A — pick this week's build winner from the past week's ideas (looks backward).
