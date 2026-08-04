@@ -57,19 +57,59 @@ quizzed is working from memory. Leaking it costs you the measurement.
 
 Ask ONE open question, then wait for a real answer.
 
-Constructing it is the hardest part of this command, because you can see the
-answer:
+### Generating the probe
 
-- **Interrogate the mechanism the idea depends on. Never rephrase the idea's own
-  description as the question.** "How would you build the conductance-matrix
-  solver described here?" hands over the answer inside the question. "What
-  actually has to happen for this to work?" does not.
+**Before writing the question, identify the idea's HARD PART** — the thing that
+would sink the build in week two. That is check 2's target. Aim the probe there,
+not at the idea's overall description.
+
+**RULE: the question must NOT be answerable by paraphrasing the idea's own
+text.** Self-test before asking: could someone who had read only the idea's
+description answer this by restating it? If yes, the probe LEAKED — regenerate.
+Ask *how the hard part works*, never *what this is*.
+
+Aim at the hard part without naming it. A question that announces where the
+difficulty lies has answered check 2 on their behalf.
+
 - Do not name the core mechanism, the hard part, or any specific technique from
   the file. If your question contains a term the answer should have supplied,
   rewrite the question.
 - Do not offer hints, examples, or a starting point. Silence is data.
 - One question. Do not stack sub-questions that decompose the problem for them —
   the decomposition is part of what's being measured.
+
+### Worked example — "Agent Guardrails Kit" [Leverage]
+
+The idea as written in the file: generalize finance_bot's bounded-agent
+architecture — step caps, retry budgets, enumerated error categories,
+constrained output vocabulary, a written v1 contract — into a framework-agnostic
+Python package other builders drop into their own agent loops.
+
+**BAD** (leaks — this is a comprehension question):
+
+> "What would they be getting when they buy this kit?"
+
+Why it leaks: the idea's own first sentence IS the answer. "Step caps, retry
+budgets, enumerated error categories" can be read straight off the page. This
+measures whether someone can restate a digest — the one thing textual fluency
+guarantees and knowledge does not.
+
+**GOOD** (mechanism — forces reconstruction of the hard part):
+
+> "Someone installs this into their own agent loop tomorrow. Walk me through
+> what actually happens at runtime the first time their agent blows its budget."
+
+Why it can't be answered from the digest: the file never describes runtime
+behaviour anywhere. Answering requires reconstructing where the counter lives,
+how a package that doesn't own the loop gets control at all, and what it does
+when the cap trips — raise, halt flag, return partial. And it surfaces the hard
+part without naming it: anyone who actually knows this idea will volunteer "the
+tricky bit is you don't own their loop," which is precisely what check 2 is
+listening for.
+
+Both questions are about the SAME idea, and differ only in comprehension versus
+mechanism. That contrast is the entire lesson. A good/bad pair drawn from two
+different ideas teaches nothing about the distinction.
 
 ## Step 4 — Grade it
 
