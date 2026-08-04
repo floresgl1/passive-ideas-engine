@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(git -C \"c:\\\\Users\\\\00849\\\\passive-ideas-engine\" log --all --diff-filter=ADR --name-status --format=\"%n=== %h %ad %s\" --date=short)",
+      "Skill(schedule)",
+      "Skill(schedule:*)",
+      "PowerShell(git -C \"c:\\\\Users\\\\00849\\\\passive-ideas-engine\" log --all --format=\"%h %ad %d %s\" --date=short)"
+    ]
+  }
+}
