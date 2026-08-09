@@ -329,8 +329,23 @@ being quizzed while new ones keep arriving. Say so directly.
 ================================================================
 
 ### Post 1 — ideas channel
-Post the combined PART A + PART B summary via webhook:
-IDEAS_WEBHOOK_URL
+Post the combined PART A + PART B summary to the ideas channel.
+
+The webhook URL is in the environment variable `IDEAS_WEBHOOK_URL`, already set
+in your session — you do not need to be given the value. Deliver it with Bash
+and `curl`; there is no dedicated webhook tool, and its absence does not mean
+you cannot post:
+
+    # write the message body first so the text survives shell quoting
+    python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))' \
+      < post1.txt > post1.json
+    curl -sS -w '%{http_code}\n' -X POST "$IDEAS_WEBHOOK_URL" \
+      -H 'Content-Type: application/json' --data-binary @post1.json
+
+A successful post returns HTTP 204. Confirm that code before reporting the post
+delivered. If the POST fails or returns anything else, say so explicitly in your
+run summary and include the status code — this routine runs unattended, so a
+post you assumed went out and never did is a silent failure.
 
 Structure it in two short sections:
 
@@ -357,8 +372,11 @@ Keep the whole message readable in one Discord message. Do NOT include queue
 counts here — those go to the quiz channel.
 
 ### Post 2 — quiz channel
-Post the PART C report via a DIFFERENT webhook:
-QUIZ_WEBHOOK_URL
+Post the PART C report to the quiz channel, via a DIFFERENT webhook.
+
+The URL is in the environment variable `QUIZ_WEBHOOK_URL` — same delivery method
+as Post 1, same HTTP 204 check, same rule about reporting a failed post honestly.
+Do not reuse `IDEAS_WEBHOOK_URL` here; these are two distinct channels.
 
 This is a separate channel with a separate purpose. Keep it short — four or
 five lines:
@@ -390,4 +408,4 @@ found by reading both side by side. Echoing the marker makes any future
 divergence self-announcing: if a run's marker doesn't match the marker in the
 repo copy, the payload is stale. No audit required to notice.
 
-<!-- prompt-version: 2026-08-04.2 -->
+<!-- prompt-version: 2026-08-09.1 -->

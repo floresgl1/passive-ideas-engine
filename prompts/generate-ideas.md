@@ -131,8 +131,22 @@ Three reasons this is absolute:
 decay clock from a measurement that never occurred.
 
 ## Output — post to Discord
-After committing, post a concise version to Discord via webhook:
-IDEAS_WEBHOOK_URL
+After committing, post a concise version to the ideas channel.
+
+The webhook URL is in the environment variable `IDEAS_WEBHOOK_URL`, already set
+in your session — you do not need to be given the value. Deliver it with Bash
+and `curl`; there is no dedicated webhook tool, and its absence does not mean
+you cannot post:
+
+    # write the message body first so the text survives shell quoting
+    python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))' \
+      < post.txt > post.json
+    curl -sS -w '%{http_code}\n' -X POST "$IDEAS_WEBHOOK_URL" \
+      -H 'Content-Type: application/json' --data-binary @post.json
+
+A successful post returns HTTP 204. Confirm that code before reporting the post
+delivered. If the POST fails, say so explicitly in your run summary and include
+the status code rather than reporting a delivery that did not happen.
 
 Format: a one-line date header, then each idea as its [category] tag in bold,
 the idea in one sentence, and the first concrete step. Keep the whole message
@@ -155,4 +169,4 @@ measurement loop rests on. Echoing the marker makes any future divergence
 self-announcing: if a run's marker doesn't match the marker in the repo copy,
 the payload is stale.
 
-<!-- prompt-version: 2026-08-04.1 -->
+<!-- prompt-version: 2026-08-09.1 -->
