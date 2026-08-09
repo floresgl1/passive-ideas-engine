@@ -12,7 +12,7 @@
 
 ### golf-swing-analyzer
 Analyzes a golf swing from a single phone video — per-frame pose estimation, phase segmentation, tempo/body-angle measurement, four biomechanical fault flags, corrective drills, closed diagnose → prescribe → verify loop across sessions.
-**Tech:** Python (MediaPipe Pose Tasks, OpenCV, matplotlib, pytest) as source of truth; Flutter/Dart port (ML Kit, ffmpeg, camera, share_plus). ~8.4k LOC, 66 commits, PR workflow, custom Claude Code sub-agents checked into the repo.
+**Tech:** Python (MediaPipe Pose Tasks, OpenCV, matplotlib, pytest) as source of truth; Flutter/Dart port (ML Kit, ffmpeg, camera, share_plus), iOS build now verified in CI via a dedicated macOS compile-check workflow (unsigned build, pinned Flutter SDK). ~8.4k LOC, 66 commits, PR workflow, custom Claude Code sub-agents checked into the repo.
 **Transferable capability:** Turn a noisy real-world signal into a defensible measurement pipeline — physically-reasoned landmark choice, scale-invariant normalization, correct math (circular smoothing, pixel-space angles). Maintains two parallel language implementations *and* holds a known divergence open on purpose until thresholds are validated. Knows the difference between a measurement and a verdict, and ships the product that claims only the former.
 
 ### finance_bot
@@ -23,7 +23,7 @@ Fully automated algorithmic paper-trading system over a 12-ticker watchlist: dat
 ### stripe-reconciler
 Turns a Stripe payout into balanced double-entry journal entries — books each balance transaction, splits revenue from fees, routes unknowns to Suspense, exports a journal that sums to zero.
 **Tech:** Flask + PostgreSQL, React 19 + Vite, Stripe Apps auth, bcrypt, flask-limiter, Resend, gunicorn on Render. ~3.6k LOC, 54 commits, six backend test suites gated by CI.
-**Transferable capability:** Build a multi-tenant SaaS product end to end and get the unglamorous parts right. Security is reasoned, not cargo-culted: CSRF origin checks with a documented webhook exemption, timing-attack equalization, digest-only single-use reset tokens, origin-derived cookie flags, tenant-isolation tests as a first-class suite. Disciplined domain modeling: integer cents throughout, explicit Suspense account over silent defaults. CI fails closed when no suites are found.
+**Transferable capability:** Build a multi-tenant SaaS product end to end and get the unglamorous parts right. Security is reasoned, not cargo-culted: CSRF origin checks with a documented webhook exemption, timing-attack equalization, digest-only single-use reset tokens, origin-derived cookie flags, tenant-isolation tests as a first-class suite. Disciplined domain modeling: integer cents throughout, explicit Suspense account over silent defaults. CI fails closed when no suites are found. Extended this week to scope payouts/journals per Stripe *connection* rather than per user — authorization epochs, connection-scoped uniqueness — so one bookkeeper can manage multiple client accounts without cross-account leakage (six suites, 117 checks, green).
 
 ### visual-search-engine
 Natural-language search over an image collection: CLIP embeddings for images and text, vector DB, REST API.
@@ -59,7 +59,7 @@ OS coursework in C/C++: fork topologies, signals/sigaction, exec, wait across gr
 - **Python service and pipeline architecture** — separation of concerns as an explicit rule so one failure can't corrupt another (finance_bot, stripe-reconciler, golf).
 - **REST API design** — Flask and FastAPI, Pydantic schemas, session auth, route-level rate limiting (stripe-reconciler, visual-search-engine).
 - **Testing discipline** — pytest and Dart suites, characterization tests, golden fixtures, robustness tests; recognizes that a threshold test which can't detect a threshold change is vacuous (golf, finance_bot, stripe-reconciler).
-- **CI/CD and scheduled automation** — GitHub Actions, concurrency groups, cron, caching, PR-gated fail-closed workflows (finance_bot, stripe-reconciler).
+- **CI/CD and scheduled automation** — GitHub Actions, concurrency groups, cron, caching, PR-gated fail-closed workflows (finance_bot, stripe-reconciler, golf).
 - **Production observability and failure handling** — pre-flight validation, staleness detection, halt flags, loss limits, transition-only alerting, severity-classified silent-failure audits (finance_bot).
 - **Design documentation as a first-class artifact** — roadmaps as single source of truth, decision records, contracts written before the implementing commit (golf, finance_bot, stripe-reconciler).
 - **Learns by building instrumentation** *(GRADUATED out of Intent)* — builds tooling/harnesses/simulators to serve his own understanding; proven by Claude Code sub-agents and harness-before-feature patterns in the repos, not merely stated.
@@ -111,6 +111,8 @@ The **hardware/architecture axis is all DIRECTION and ZERO SHIPPED INVENTORY.** 
 
 The **self-scoped-but-stalled visual JS circuit simulator is the shovel-ready way to do it.** It sits exactly at the two-axis intersection — proven software-delivery capability applied to the hardware/analog direction — and would unlock a whole category of otherwise-unreachable ideas (hardware-shippable and hardware-teaching). For the passive-income goal, building this keystone is worth more than selecting any single idea, because several of the best ideas depend on it existing.
 
+Still zero shipped inventory as of this refresh. The idea engine proposed the circuit simulator six times (2026-08-01 through 2026-08-06) with no reported progress, then tried two different untested hardware conceptual lines (computer-architecture Iron Law reasoning on 08-08, polling-vs-interrupt reasoning on 08-09) — also unbuilt. None of this is evidence of anything; per this file's own firewall, a proposal is not a capability. The keystone remains open.
+
 ---
 
 ## Trajectory
@@ -120,4 +122,4 @@ Older work (Oct–Nov 2025) is tutorial-shaped: notebook-first ML/CV that stands
 ---
 
 ## last_refresh
-2026-08-04
+2026-08-09
