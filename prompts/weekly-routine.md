@@ -15,9 +15,12 @@
 > any other branch, PART A will see an empty `ideas/` folder and the loop breaks.
 
 > **WRITE SCOPE (critical):** The only files you may write are `profile.md`,
-> `career-log.md`, and a GitHub issue. You must NEVER modify, rewrite, or
-> reformat any file in `ideas/`. Those files carry quiz results written by
-> another routine; editing them destroys measurements that cannot be recovered.
+> `career-log.md`, `quiz-queue.json`, and a GitHub issue. You must NEVER modify,
+> rewrite, or reformat any file in `ideas/`. Those files carry quiz results
+> written by another routine; editing them destroys measurements that cannot be
+> recovered. `quiz-queue.json` is the one exception added later: it is a DERIVED
+> index that points AT ideas, and holds no measurement of its own — which is
+> exactly why building it here does not breach the rule above.
 
 This routine does THREE jobs in one run, in this order:
   PART A — pick this week's build winner from the past week's ideas (looks backward).
@@ -128,6 +131,64 @@ IF NO cluster clears the bar:
 
 Carry the PART A result (issue opened + title, or "no winner") into the Discord
 post at the end.
+
+### A7 — Stock the quiz queue
+
+You have just done the expensive part — clustering the week by concept and
+counting distinct days. The quiz queue is a by-product of that work, so build it
+here rather than making another routine redo the clustering.
+
+**Only clusters that recurred on ≥2 distinct days become quiz-eligible.** This
+is the same recurrence signal PART A ranks on, at a lower threshold. The reason
+is not throughput: a `competence` verdict exists to inform a decision — which
+build to protect time for, and eventually what may be claimed outwardly. An idea
+that appears once and never returns will never be built and never be claimed, so
+measuring it produces a number nobody acts on. Ideas generate at ~4/day and no
+human answers 28 probes a week; gating on recurrence is what makes the queue
+match a real answering rate instead of growing forever.
+
+Ideas that never qualify simply stay `competence: unlabeled` in their files,
+permanently. That is not a gap in the record — it is the record, and it is
+accurate: nobody ever measured them.
+
+For each qualifying cluster, append ONE entry — the cluster's **most recent**
+occurrence, which is its most refined framing — to `quiz-queue.json`:
+
+```json
+{
+  "idea_file": "ideas/2026-08-06.md",
+  "idea_heading": "### 4. Two-Node Voltage-Divider Solver — [Stretch]",
+  "idea_name": "Two-Node Voltage-Divider Solver",
+  "recurred_days": 3,
+  "queued_at": "2026-08-09",
+  "expires_at": "2026-08-30",
+  "status": "pending"
+}
+```
+
+Rules:
+
+- **One entry per cluster, never one per occurrence.** The cluster is the thing
+  being measured; queuing three framings of one concept asks the same question
+  three times.
+- `idea_heading` must be the idea's exact `###` line, byte for byte. The quiz
+  routine anchors its verdict edit on it, and every idea in a file has a
+  byte-identical `- competence: unlabeled` line beneath it — an anchor that is
+  merely close silently labels the wrong idea.
+- `expires_at` is `queued_at` + **21 days**, UTC.
+- **Skip a cluster already present** with `status: "pending"` or `"labeled"`.
+  A concept that recurs for three straight weeks is one question, not three.
+  Re-queue a previously `"expired"` cluster only if it recurred again this week
+  — sustained recurrence after a lapse is new evidence.
+- Never set `status` to anything but `"pending"` here. Only the quiz routines
+  write `"labeled"`, and only expiry writes `"expired"`.
+
+Also sweep: any entry whose `expires_at` has passed and is still `"pending"`
+becomes `"expired"`. Leave the idea's own file untouched — expiry is a queue
+concept, not a measurement, and `competence` stays `unlabeled` because that is
+what actually happened.
+
+Commit `quiz-queue.json` with the `profile.md` commit at the end of the run.
 
 ================================================================
 ## PART B — Refresh the Profile
@@ -308,21 +369,33 @@ diff. An audit nobody performs is not an audit.
 ## PART C — Quiz Queue Health
 ================================================================
 
-You have already read the week's idea files. Now read ALL files in `ideas/`
-(not just the last 7 days) and count, mechanically:
+Read `quiz-queue.json` and ALL files in `ideas/` (not just the last 7 days), and
+count, mechanically:
 
-- **Queue depth** — total ideas with `competence: unlabeled`.
-- **Label distribution** — counts of `known` / `needs work` / `no knowledge`.
+- **Queue depth** — entries in `quiz-queue.json` with `status: "pending"`.
+  This is the number of questions actually waiting for an answer.
+- **Label distribution** — counts of `known` / `needs work` / `no knowledge`
+  across `ideas/`.
 - **Labeled this week** — ideas whose `labeled_at` falls within the last 7 days.
-- **Oldest unlabeled** — the date of the earliest idea file still containing an
-  `unlabeled` idea.
+- **Oldest pending** — the `queued_at` of the earliest `"pending"` entry, and
+  how many days remain before it expires.
+- **Expired since last run** — entries that aged out unanswered this week.
+
+Queue depth counts the QUEUE, not every unlabeled idea. Most ideas are never
+queued — they generate at ~4/day, never recur, and stay `unlabeled` forever by
+design. Reporting that lifetime total as a backlog invents a debt nobody owes
+and makes a healthy queue look like a crisis.
 
 These are counts, not judgments. Do not label anything, do not infer what a
 label should be, and do not edit any file in `ideas/`.
 
 Then assess ONE thing: **is the intake loop running?** If queue depth is
-non-zero AND "labeled this week" is zero, the loop has stalled — no ideas are
-being quizzed while new ones keep arriving. Say so directly.
+non-zero AND "labeled this week" is zero, the loop has stalled — questions are
+waiting and none are being answered. Say so directly.
+
+A high **expired** count with a healthy answer rate is not a stall; it means the
+recurrence gate is admitting more than gets answered, and the gate — not the
+person — is what needs adjusting. Say which of the two you are seeing.
 
 ================================================================
 ## Output — two separate Discord posts
@@ -408,4 +481,4 @@ found by reading both side by side. Echoing the marker makes any future
 divergence self-announcing: if a run's marker doesn't match the marker in the
 repo copy, the payload is stale. No audit required to notice.
 
-<!-- prompt-version: 2026-08-09.1 -->
+<!-- prompt-version: 2026-08-10.1 -->
