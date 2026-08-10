@@ -18,13 +18,16 @@ probe or where the bar sits, `/quiz` wins and this file is the bug.
 > reading, `git push` after writing state. The daily and weekly routines both
 > read and write `main`; state committed anywhere else is invisible to Phase 2.
 
-> **WRITE SCOPE (critical):** the only file you may write is `quiz-state.json`.
-> You may NOT write to `ideas/` at all — not a verdict, not a field, not a
-> reformat. Phase 1 has measured nothing yet, so it has nothing to record.
+> **WRITE SCOPE (critical):** the only files you may write are
+> `quiz-state.json` and `quiz-queue.json` (the latter only to mark expired
+> entries, per Step 1). You may NOT write to `ideas/` at all — not a verdict,
+> not a field, not a reformat. Phase 1 has measured nothing yet, so it has
+> nothing to record.
 
-> **LEGACY FILES:** ideas with no `competence` / `labeled_at` lines are tracked
-> debt with a pending decision. They are NOT in the queue. Do not backfill them,
-> do not add fields to them, do not quiz them. Skip silently.
+> **NEVER TOUCH IDEA FILES:** some ideas have no `competence` / `labeled_at`
+> lines at all, and many that do will stay `unlabeled` forever because they
+> never recurred. Neither is a defect to repair. Do not backfill fields, do not
+> add fields, do not quiz anything that is not a `quiz-queue.json` entry.
 
 ---
 
@@ -45,15 +48,28 @@ If `quiz-state.json` does not exist, treat it as `{"stage": "idle"}`.
 
 ## Step 1 — Find the queue
 
-```
-grep -l "competence: unlabeled" ideas/*.md
-```
+The queue is `quiz-queue.json`, **not** a grep over `ideas/`. The weekly routine
+stocks it with one entry per concept that recurred on ≥2 distinct days. Ideas
+that never recurred are not queue entries and must not be quizzed — they stay
+`unlabeled` permanently, which is an accurate record of never having been
+measured, not a backlog.
 
-Take the **oldest** matching file, read it, and pick the **first** idea in it
-still marked `unlabeled`. Oldest-first, because the ideas closest to dying
-unexamined are the ones this exists to catch.
+Take the entry with `status: "pending"` and the **oldest** `queued_at`.
+Oldest-first, because the ideas closest to dying unexamined are the ones this
+exists to catch — and under the 21-day window they now genuinely do die.
 
-If the queue is empty, post nothing and stop. Do not invent work.
+Before selecting, sweep: any `"pending"` entry whose `expires_at` has passed
+becomes `"expired"`. Do not quiz it, do not touch the idea's file, and never
+write a verdict for an entry that aged out — expiry measures attendance, not
+knowledge.
+
+Read the idea from `idea_file` at `idea_heading`. If the heading is not found
+byte-for-byte, **stop and say so** rather than guessing a nearby one: every idea
+in a file has a byte-identical `- competence: unlabeled` line, so a near-miss
+anchor silently targets the wrong idea.
+
+If no `"pending"` entry remains, post nothing and stop. Do not invent work, and
+do not fall back to grepping `ideas/` for something to ask.
 
 ## Step 2 — Write the probe
 
@@ -76,9 +92,10 @@ Post the idea's **name and [category] only**, then the probe. Never the body,
 the summary, or any sentence from the file — the person is answering from
 memory and you have the text open.
 
-**Do NOT include the queue depth.** One idea, and silence about the backlog. A
-quiz that opens with "39 pending" is a quiz that stops getting opened, and the
-size of this queue makes that failure likelier, not less likely.
+**Do NOT include the queue depth.** One idea, and silence about how many others
+are waiting. A quiz that opens with "9 pending" is a quiz that stops getting
+opened — the count adds nothing to the question and turns a two-minute answer
+into a chore with a visible backlog attached.
 
 Post with `?wait=true` so Discord returns the created message and you can record
 its ID — Phase 2 uses it as the anchor to read replies after:
@@ -140,4 +157,4 @@ rebase around it, or stash someone else's work — the daily routine pushes to
 - Never label an idea because a probe expired unanswered.
 - Never report a probe as posted without an HTTP 200 and a parsed message ID.
 
-<!-- prompt-version: 2026-08-10.1 -->
+<!-- prompt-version: 2026-08-10.2 -->

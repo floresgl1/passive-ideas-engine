@@ -15,11 +15,11 @@ bar, `/quiz` wins and this file is the bug.
 > **BRANCH RULE:** work on `main`. `git checkout main`, `git pull` before
 > reading, `git push` after each verdict.
 
-> **WRITE SCOPE (critical):** you may write `quiz-state.json`, and — in
-> `ideas/` — only the `- competence:` and `- labeled_at:` lines of the single
-> idea named in `quiz-state.json`. Never rewrite a title, category, or body.
-> Never reformat a file. Never touch a second idea. These files are the
-> measurement record.
+> **WRITE SCOPE (critical):** you may write `quiz-state.json`, the matching
+> entry's `status` in `quiz-queue.json`, and — in `ideas/` — only the
+> `- competence:` and `- labeled_at:` lines of the single idea named in
+> `quiz-state.json`. Never rewrite a title, category, or body. Never reformat a
+> file. Never touch a second idea. These files are the measurement record.
 
 > **THE INTEGRITY RULE:** a verdict may only be written when this run has read
 > an actual reply message from the quizzed person, matched to the probe recorded
@@ -130,17 +130,21 @@ global or first-match replace will silently label the wrong idea, and a wrong
 label is worse than no label — it is a measurement that never happened, wearing
 the costume of one. Include the heading in the match. **Never `replace_all`.**
 
+Also set the matching entry in `quiz-queue.json` to `status: "labeled"`, so the
+weekly routine does not re-queue a concept that has now been measured.
+
 Then, in one commit:
 
 ```
-git add ideas/<file>.md quiz-state.json
+git add ideas/<file>.md quiz-state.json quiz-queue.json
 git commit -m "Quiz: <idea name> → <verdict>"
 git push origin main
 ```
 
-Set `stage` back to `"idle"` in the same commit. Verdict and state must land
-together — a verdict committed with a stale state file gets re-graded on the
-next run and overwritten by the second grading of the same answer.
+Set `stage` back to `"idle"` in the same commit. Verdict, state, and queue must
+land together — a verdict committed with a stale state file gets re-graded on
+the next run and overwritten by the second grading of the same answer, and a
+queue entry left `"pending"` gets asked again next week.
 
 If the tree is dirty or the push is rejected, **stop and say so.** Do not force,
 rebase around it, or stash someone else's work.
@@ -152,12 +156,13 @@ and what its hard part was, in two or three sentences. For `needs work` and
 `no knowledge` this is the entire payoff — the point is to stop ideas dying
 unexamined, and an idea you just failed and then learned is no longer dying.
 
-This is safe to post because a labeled idea leaves the queue permanently —
-`/quiz` Step 1 only ever selects `unlabeled` ideas, so nothing you teach here
-can be asked again. **If a decay routine is ever built to re-quiz labeled
-ideas, this stops being true**: the channel will by then hold a written answer
-key, and that routine must not draw its probes from ideas whose mechanism was
-taught here. Note it now, while the reason is still visible.
+This is safe to post because a labeled entry leaves the queue permanently —
+Phase 1 only ever selects `"pending"` entries, and the weekly routine skips
+concepts already marked `"labeled"`, so nothing you teach here can be asked
+again. **If a decay routine is ever built to re-quiz labeled ideas, this stops
+being true**: the channel will by then hold a written answer key, and that
+routine must not draw its probes from ideas whose mechanism was taught here.
+Note it now, while the reason is still visible.
 
 Do not offer "another one, or stop" — that is the face-to-face command's line.
 Phase 1 posts the next probe on its own schedule.
@@ -172,4 +177,4 @@ Phase 1 posts the next probe on its own schedule.
   `quiz-state.json`.
 - Never backfill fields into legacy fieldless ideas.
 
-<!-- prompt-version: 2026-08-10.1 -->
+<!-- prompt-version: 2026-08-10.2 -->

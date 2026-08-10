@@ -80,7 +80,24 @@ curl -sS -H "Authorization: Bot $DISCORD_BOT_TOKEN" \
 `401` = bad token. `403` = bot not invited, or missing View Channel / Read
 Message History. `200` with empty `content` = Message Content Intent off.
 
-## 6. State
+## 6. What actually enters the queue
+
+The bot does not quiz every idea. `prompts/weekly-routine.md` PART A step A7
+stocks `quiz-queue.json` with **one entry per concept that recurred on ≥2
+distinct days**, and entries expire unanswered after **21 days**.
+
+Ideas generate at ~4/day (28/week). No human answers 28 probes a week, so
+without a gate the queue grows forever and expiry alone cannot help — expiry
+bounds how deep the pile looks, but the fraction ever measured is set entirely
+by the intake:answer ratio. Recurrence-gating brings intake to ~2-3/week, which
+matches a real answering rate, and picks the set where a verdict changes a
+decision: PART A ranks builds by recurrence, so a concept that never recurs will
+never be built and never be claimed.
+
+Ideas that never qualify stay `competence: unlabeled` in their files
+permanently. That is the accurate record — nobody measured them — not a debt.
+
+## 7. State
 
 `quiz-state.json` at the repo root is the whole state machine:
 
