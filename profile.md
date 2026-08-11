@@ -12,7 +12,7 @@
 
 ### golf-swing-analyzer
 Analyzes a golf swing from a single phone video — per-frame pose estimation, phase segmentation, tempo/body-angle measurement, four biomechanical fault flags, corrective drills, closed diagnose → prescribe → verify loop across sessions.
-**Tech:** Python (MediaPipe Pose Tasks, OpenCV, matplotlib, pytest) as source of truth; Flutter/Dart port (ML Kit, ffmpeg, camera, share_plus), iOS build now verified in CI via a dedicated macOS compile-check workflow (unsigned build, pinned Flutter SDK). ~8.4k LOC, 66 commits, PR workflow, custom Claude Code sub-agents checked into the repo.
+**Tech:** Python (MediaPipe Pose Tasks, OpenCV, matplotlib, pytest) as source of truth; Flutter/Dart port (ML Kit, ffmpeg, camera, share_plus), iOS build now verified in CI via a dedicated macOS compile-check workflow (unsigned build, pinned Flutter SDK) plus a post-generate iOS config script that closed a gap the compile check couldn't see (missing camera-permission string; a weak `grep -q` guard that passed with 1 of 3 build configs unpatched). ~8.4k LOC, 66 commits, PR workflow, custom Claude Code sub-agents checked into the repo.
 **Transferable capability:** Turn a noisy real-world signal into a defensible measurement pipeline — physically-reasoned landmark choice, scale-invariant normalization, correct math (circular smoothing, pixel-space angles). Maintains two parallel language implementations *and* holds a known divergence open on purpose until thresholds are validated. Knows the difference between a measurement and a verdict, and ships the product that claims only the former.
 
 ### finance_bot
@@ -22,8 +22,8 @@ Fully automated algorithmic paper-trading system over a 12-ticker watchlist: dat
 
 ### stripe-reconciler
 Turns a Stripe payout into balanced double-entry journal entries — books each balance transaction, splits revenue from fees, routes unknowns to Suspense, exports a journal that sums to zero.
-**Tech:** Flask + PostgreSQL, React 19 + Vite, Stripe Apps auth, bcrypt, flask-limiter, Resend, gunicorn on Render. ~3.6k LOC, 54 commits, six backend test suites gated by CI.
-**Transferable capability:** Build a multi-tenant SaaS product end to end and get the unglamorous parts right. Security is reasoned, not cargo-culted: CSRF origin checks with a documented webhook exemption, timing-attack equalization, digest-only single-use reset tokens, origin-derived cookie flags, tenant-isolation tests as a first-class suite. Disciplined domain modeling: integer cents throughout, explicit Suspense account over silent defaults. CI fails closed when no suites are found. Extended this week to scope payouts/journals per Stripe *connection* rather than per user — authorization epochs, connection-scoped uniqueness — so one bookkeeper can manage multiple client accounts without cross-account leakage (six suites, 117 checks, green).
+**Tech:** Flask + PostgreSQL, React 19 + Vite, Stripe Apps auth, bcrypt, flask-limiter, Resend, gunicorn on Render. ~3.9k LOC, 77 commits, 11 backend test suites (298 checks) gated by CI.
+**Transferable capability:** Build a multi-tenant SaaS product end to end and get the unglamorous parts right. Security is reasoned, not cargo-culted: CSRF origin checks with a documented webhook exemption, timing-attack equalization, digest-only single-use reset tokens, origin-derived cookie flags, tenant-isolation tests as a first-class suite. Disciplined domain modeling: integer cents throughout, explicit Suspense account over silent defaults. CI fails closed when no suites are found. Extended to scope payouts/journals per Stripe *connection* rather than per user — authorization epochs, connection-scoped uniqueness — so one bookkeeper can manage multiple client accounts without cross-account leakage. This week completed the OAuth account-confirmation flow on top of that: refresh tokens encrypted at rest (AES-256-GCM, associated data binds ciphertext to its row so it can't be copied onto another), an atomicity-first "epoch seam" for provisional connection rows, and a real cache/row-lock race caught by CI, reproduced deliberately, and fixed rather than papered over.
 
 ### visual-search-engine
 Natural-language search over an image collection: CLIP embeddings for images and text, vector DB, REST API.
@@ -39,6 +39,11 @@ Vehicle detection/classification on Caltrans traffic footage, intended to correl
 OS coursework in C/C++: fork topologies, signals/sigaction, exec, wait across grandchildren, pipes, pthreads, a deliberate race condition with two mutex fixes.
 **Tech:** C/C++, POSIX, pthreads, mutexes. ~1.3k LOC across 26 programs.
 **Transferable capability:** Working understanding of the systems layer beneath the Python — process lifecycle, IPC, concurrency primitives. Race-condition-then-fix progression shows the failure was reproduced before it was patched.
+
+### circuit-simulator
+A small DC circuit simulator built on Modified Nodal Analysis (MNA): resistors and ideal DC voltage sources, solving for every node voltage and source current, with explicit `SingularCircuitError` detection for floating nodes and shorted/contradictory sources.
+**Tech:** Python, NumPy, pytest. src-layout package (`components.py` → `circuit.py` → `solver.py`, one-way dependency arrow). 1 commit, 403 lines, 11 tests (voltage dividers, parallel loads, multi-source superposition, singular-circuit cases), all green. No CI configured yet; no design doc predates the commit.
+**Transferable capability:** Real numerical circuit analysis (not a faked/table-driven output) shipped as working, tested code — the first shipped artifact on the hardware/architecture axis. Scoped narrowly on purpose: resistive DC networks only, no reactive elements, no dependent sources, no visualizer/UI yet. **Honest scope note:** this is the data-model-and-solver phase of the 5-phase circuit-simulator direction named in `profile.md`'s own Direction & Intent (data model → solver → visualizer → interactivity → dependent sources) — phases 3–5 are still unshipped, and this implementation is Python, not the originally-stated JS/visual version.
 
 ### Skipped (empty scaffolds — excluded from all reasoning)
 - **coral-reef-monitor** — empty requirements.txt, 0-byte notebook, empty `__init__.py`, one commit, no implementation.
@@ -63,6 +68,7 @@ OS coursework in C/C++: fork topologies, signals/sigaction, exec, wait across gr
 - **Production observability and failure handling** — pre-flight validation, staleness detection, halt flags, loss limits, transition-only alerting, severity-classified silent-failure audits (finance_bot).
 - **Design documentation as a first-class artifact** — roadmaps as single source of truth, decision records, contracts written before the implementing commit (golf, finance_bot, stripe-reconciler).
 - **Learns by building instrumentation** *(GRADUATED out of Intent)* — builds tooling/harnesses/simulators to serve his own understanding; proven by Claude Code sub-agents and harness-before-feature patterns in the repos, not merely stated.
+- **Applied web application security** *(PROMOTED to [strong])* — CSRF enforcement with reasoned exemptions, timing equalization, digest-only tokens, single-use resets, webhook signature verification, tenant isolation under test, plus (new) an OAuth account-confirmation flow: AES-256-GCM at-rest encryption for refresh tokens with associated-data row binding and key rotation, an atomicity-first "epoch seam" for provisional rows, and a real concurrency race caught by CI, reproduced deliberately, and fixed with correct reasoning about lock scope (stripe-reconciler). Still one repo, but now deep rather than shallow — reasoned, tested (298 checks), and has already caught a real bug in itself.
 
 ### [emerging] — appears once or shallowly, shipped
 - Model interpretability and comparison — SHAP, compare_models.py (finance_bot).
@@ -70,11 +76,11 @@ OS coursework in C/C++: fork topologies, signals/sigaction, exec, wait across gr
 - NLP for domain signal — FinBERT sentiment, held dormant as a veto (finance_bot).
 - Relational data modeling — reasoned nullability, idempotent uniqueness constraints, inline migration notes (stripe-reconciler).
 - Systems programming — processes, IPC, signals, threads, mutexes in C/C++ (CSE4600-HW1).
-- Applied web application security — CSRF enforcement with reasoned exemptions, timing equalization, digest-only tokens, single-use resets, webhook signature verification, tenant isolation under test (stripe-reconciler). One repo, unusually deliberate.
 - React 19 + Vite SPA against an authenticated API (stripe-reconciler).
 - Flutter/Dart mobile — camera capture, on-device inference, local persistence, share-sheet-only export (golf).
 - Containerization and deployment — Docker/compose, gunicorn on Render (visual-search-engine, stripe-reconciler, finance_bot).
 - AI-assisted development workflow at the tooling level — repo-scoped sub-agents with enforced scopes, guardrail files (golf).
+- **Circuit analysis** *(GRADUATED from [conceptual])* — Modified Nodal Analysis solver for resistive DC circuits: arbitrary node count, multiple ideal voltage sources, singular-circuit detection (circuit-simulator). Scoped narrowly — resistors and DC sources only, no reactive elements or dependent sources yet; broader coursework understanding (mesh/phasor/s-domain, PSpice cross-verification) remains conceptual beyond what's actually shipped here.
 
 ### [conceptual] — understood, reasoned through, NOT yet shipped
 *(All from coursework. Genuine understanding, no repo. Do not treat as build-capacity.)*
@@ -82,7 +88,6 @@ OS coursework in C/C++: fork topologies, signals/sigaction, exec, wait across gr
 - **Real-time scheduling analysis** — EDF, LDF, Rate Monotonic, cyclic executive, polling servers; precedence-graph reasoning; hyperperiod/schedulability analysis (Embedded Systems / MSP432).
 - **Hardware–software boundary reasoning** — driver placement, polling vs. interrupt tradeoffs (CPU/latency/power), interrupt signal direction (Embedded Systems).
 - **Networking across the full stack** — forwarding vs. routing (data/control plane), transport reliability, IP addressing/subnetting, link-layer mechanics; hands-on Wireshark capture (HTTP caching, DNS, TCP handshakes) (CSE 4100).
-- **Circuit analysis** — nodal/mesh/phasor/s-domain; circuit-as-graph modeling; hand-calc vs. PSpice cross-verification with a ~1% mismatch debug threshold (CSE 4030).
 
 ---
 
@@ -96,7 +101,7 @@ OS coursework in C/C++: fork topologies, signals/sigaction, exec, wait across gr
 - **Embedded next step queued:** timers & PWM (MSP432).
 
 ### Stated build intentions (unstarted or in-flight)
-- **Visual JS circuit simulator** — self-scoped 5-phase architecture (data model → solver → visualizer → interactivity → dependent sources); deliberately chose the hard version (real analysis algorithms, not faked output); **stalled at the opening design question.** See Keystone.
+- **Visual JS circuit simulator** — self-scoped 5-phase architecture (data model → solver → visualizer → interactivity → dependent sources); deliberately chose the hard version (real analysis algorithms, not faked output). Phases 1–2 (data model, MNA solver) shipped as `circuit-simulator` — see Projects and Keystone — but in Python, not the originally-stated JS/visual form. **Still open:** visualizer, interactivity, dependent sources, and, if the "visual" framing is kept, a JS port or front end.
 - **finance_bot Agent v2 ESCALATE** — LLM agent promoting HOLD→SELL on held positions using news/sentiment the model can't see; scoped to held-positions-only to bound failure/cost.
 - Verify fractional-share + OTO stop-loss compatibility in Alpaca paper before any live deployment (load-bearing first step for a $1,000 experiment).
 - Complete the SELL payoff/breakeven derivation; make an explicit go/no-go accepting single-regime risk.
@@ -107,19 +112,19 @@ OS coursework in C/C++: fork topologies, signals/sigaction, exec, wait across gr
 
 ## Keystone
 
-The **hardware/architecture axis is all DIRECTION and ZERO SHIPPED INVENTORY.** Every hardware capability is [conceptual]; every hardware goal is quarantined. The single highest-leverage move is to graduate one hardware line from [conceptual] to [strong] by shipping an artifact.
+**The hinge has been crossed.** The hardware/architecture axis had zero shipped inventory as of every prior refresh (2026-08-01 through 2026-08-09); this refresh found `circuit-simulator` — a working, tested Modified Nodal Analysis solver (see Projects) — already shipped as of 2026-08-03, and never previously reflected here because the repo was outside this routine's scope until now. Circuit analysis has moved [conceptual] → [emerging] accordingly.
 
-The **self-scoped-but-stalled visual JS circuit simulator is the shovel-ready way to do it.** It sits exactly at the two-axis intersection — proven software-delivery capability applied to the hardware/analog direction — and would unlock a whole category of otherwise-unreachable ideas (hardware-shippable and hardware-teaching). For the passive-income goal, building this keystone is worth more than selecting any single idea, because several of the best ideas depend on it existing.
+This is a **partial** crossing, not a finished keystone. What shipped is phases 1–2 of the self-scoped 5-phase visual JS circuit simulator (data model, MNA solver) — real analysis, not faked output, exactly the "hard version" the original plan called for — but in Python, with no visualizer, no interactivity, no dependent sources, and no JS/visual front end. The specific blocker named across ten prior digests (the node/edge data-model decision) is resolved; what remains is the rest of the build, not a decision.
 
-Still zero shipped inventory as of this refresh. The idea engine proposed the circuit simulator six times (2026-08-01 through 2026-08-06) with no reported progress, then tried two different untested hardware conceptual lines (computer-architecture Iron Law reasoning on 08-08, polling-vs-interrupt reasoning on 08-09) — also unbuilt. None of this is evidence of anything; per this file's own firewall, a proposal is not a capability. The keystone remains open.
+The still-open work — visualizer, interactivity, dependent sources, and the visual/JS framing if that's kept — remains the next highest-leverage move on this axis. The idea engine's other three untested hardware conceptual lines (real-time scheduling, computer-architecture Iron Law, polling-vs-interrupt) are still [conceptual] and still unbuilt; this crossing doesn't resolve those, it resolves circuit analysis specifically.
 
 ---
 
 ## Trajectory
 
-Older work (Oct–Nov 2025) is tutorial-shaped: notebook-first ML/CV that stands up a modern stack and stops at the demo. From March 2026 onward the center of gravity moves from *building a model* to *operating a system*: finance_bot, stripe-reconciler, and golf are long-running multi-month repos with CI, tests, design docs, deliberate failure handling. The sharpest trend is epistemic rather than technical — organizing work around knowing what hasn't been validated and refusing to act as though it has. A distinct, newer axis (hardware/architecture/embedded) is now clearly stated as a career direction but carries no shipped inventory yet. Direction: production ML / applied-AI systems engineering, with an emerging, not-yet-shipped pull toward hardware.
+Older work (Oct–Nov 2025) is tutorial-shaped: notebook-first ML/CV that stands up a modern stack and stops at the demo. From March 2026 onward the center of gravity moves from *building a model* to *operating a system*: finance_bot, stripe-reconciler, and golf are long-running multi-month repos with CI, tests, design docs, deliberate failure handling. The sharpest trend is epistemic rather than technical — organizing work around knowing what hasn't been validated and refusing to act as though it has. A distinct, newer axis (hardware/architecture/embedded) is now clearly stated as a career direction and has its first shipped inventory (a Python MNA circuit solver), though still narrow and one repo deep. Direction: production ML / applied-AI systems engineering, with a hardware pull that has just started shipping rather than only being stated.
 
 ---
 
 ## last_refresh
-2026-08-09
+2026-08-11

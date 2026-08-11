@@ -48,5 +48,42 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
 
 ---
 
-*No records yet. The first will be appended by PART B on the next weekly run
-that writes a tier transition.*
+## 2026-08-11 — circuit-simulator
+- axis: hardware / circuit analysis
+- transition: [conceptual] → [emerging]
+- artifact: circuit-simulator (Python `circuitsim` package)
+- evidence: Python + NumPy. Modified Nodal Analysis solver for resistive DC
+  circuits — arbitrary node count, multiple ideal DC voltage sources,
+  `SingularCircuitError` detection for floating nodes and shorted/
+  contradictory sources. src-layout package (`components.py` → `circuit.py`
+  → `solver.py`). 1 commit (2026-08-03), 403 lines. 11 pytest tests — voltage
+  dividers, unequal dividers, parallel-load current, multi-source
+  superposition, two singular-circuit cases, duplicate-name and
+  negative-resistance validation — all green, re-run and confirmed in a
+  fresh venv this session. No CI configured. No design doc predates the
+  commit. Scope: resistors and ideal DC sources only — no reactive elements,
+  no dependent sources, no visualizer or UI. Keystone: the
+  hardware/architecture axis had zero shipped inventory before this across
+  every prior refresh (2026-08-01 through 2026-08-09); this is the first
+  shipped artifact on that axis, and resolves the specific node/edge
+  data-model decision `profile.md` had named as the stalled blocker.
+
+## 2026-08-11 — stripe-reconciler (OAuth account confirmation)
+- axis: applied web application security
+- transition: [emerging] → [strong]
+- artifact: stripe-reconciler
+- evidence: Python/Flask + PostgreSQL. Commits 2026-08-09 23:49 UTC through
+  2026-08-11 03:23 UTC (`cbcdef0`..`d8a179e`, 8 commits, merged via PR #10).
+  Adds: OAuth callback and confirmation gate; AES-256-GCM authenticated
+  encryption for Stripe refresh tokens at rest, with associated-data binding
+  the ciphertext to its own row (prevents copying a ciphertext onto another
+  row) and versioned-key rotation support (`token_crypto.py`); an
+  atomicity-first "epoch seam" for provisional connection rows
+  (`test_epoch_constraints.py`, `schema.sql`); retirement of the dead
+  `/stripe/claim` endpoint; and a real concurrency bug caught by CI —
+  cache fill happening outside the row lock, causing a token-refresh race —
+  reproduced deliberately (inserted sleep reproduced CI's exact failures)
+  and fixed with a per-connection lock, with the test suite widened to
+  catch it rather than just re-passing. Backend suite: 11 test files, 298
+  checks green in a fresh venv built from `requirements.txt` under the CI
+  workflow environment. No new production deployment observed this run.
