@@ -87,3 +87,59 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   catch it rather than just re-passing. Backend suite: 11 test files, 298
   checks green in a fresh venv built from `requirements.txt` under the CI
   workflow environment. No new production deployment observed this run.
+
+## 2026-08-13 — ledger-core
+- axis: relational / double-entry data modeling
+- transition: [emerging] → [strong]
+- artifact: ledger-core (new repo, `ledger_core` Python package)
+- evidence: Python, zero runtime dependencies. Commits 2026-08-11 20:29 PT
+  through 2026-08-12 20:13 PT (`fdd7835`..`7bc1815`, 8 commits). Design
+  contract (`docs/DESIGN.md`) written and committed before any implementing
+  code. Carries stripe-reconciler's two disciplines — integer cents
+  throughout (no float ever touches money) and an explicit Suspense account
+  instead of a silent default — out of a Stripe-specific shell into a
+  processor-agnostic library: any list of `Transaction` objects in, a
+  `Journal` that sums to zero or a `BalanceReport` naming exactly what
+  doesn't balance and why, out. Adds a currency guard (mixed-currency
+  journals never silently net together) and a `Suspense` routing path with
+  the reason attached, neither of which stripe-reconciler generalized. 577
+  tests green (`tests/test_entries.py`, `tests/test_balance.py`,
+  `tests/test_journal.py`, `tests/test_stripe_adapter.py`, plus
+  `tests/test_zero_sum_property.py` — a property-based test), re-run and
+  confirmed in a fresh venv this session. CI (`.github/workflows/test.yml`)
+  fails closed on zero-collected tests across Python 3.10/3.11/3.12, the
+  same fail-closed pattern already proven in finance_bot, stripe-reconciler,
+  and golf. A `stripe.py` adapter maps raw Stripe balance-transaction
+  mappings to the processor-agnostic `Transaction` type with no network or
+  SDK dependency. This is the same relational-modeling discipline already
+  shown in stripe-reconciler, now demonstrated independently in a second
+  repo, decoupled from any one processor. No production deployment; not yet
+  published to PyPI (the README's `pip install ledger-core` is aspirational
+  — no publish step or PyPI project observed).
+
+## 2026-08-13 — finance_bot (daily-run-triage sub-agent)
+- axis: AI-assisted development workflow / meta-tooling
+- transition: [emerging] → [strong]
+- artifact: finance_bot (`.claude/agents/daily-run-triage.md`,
+  `pipeline_status.py`)
+- evidence: Python. Commit `470c3f6` (2026-08-12) adds a repo-scoped Claude
+  Code sub-agent (`daily-run-triage.md`, 118 lines) with an enforced
+  read-only tool scope (Bash, Read, Grep, Glob only — no Edit/Write) and
+  explicit hard rules: report only, never fix a task, never clear the guard
+  or halt flag, never place or cancel an order, never print secrets. Fixed
+  verdict output format (HEALTHY/DEGRADED/FAILED/NOT-A-TRADING-DAY). Backed
+  by `pipeline_status.py` (287 lines), a read-only health-snapshot script
+  correlating PythonAnywhere task exit codes, the run guard, the halt flag,
+  `signal_log.csv`, and news-agent output — exit code 2 on missing
+  credentials/network failure, 0 otherwise regardless of what it finds. This
+  is the same enforced-scope, guardrail-file pattern already shipped in
+  golf's `.claude/agents/`, now demonstrated independently in a second,
+  unrelated repo — the standard this profile uses elsewhere to promote a
+  one-repo pattern to [strong]. The tooling was put to immediate use: the
+  companion commit `09cf92a` (2026-08-12) used it to diagnose and fix a real
+  5-day silent production bug (the daily run guard being stamped by a
+  market-closed no-op, which caused the actual 15:00 UTC trading run to skip
+  every trading day since 2026-08-07), documented in a new invariant section
+  in `docs/PIPELINE.md`. No dedicated test suite for the sub-agent
+  definition itself (a prompt file, not executable code); no separate design
+  doc predates this commit beyond the sub-agent file's own inline spec.

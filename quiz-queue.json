@@ -1,3 +1,13 @@
 {
-  "entries": []
+  "entries": [
+    {
+      "idea_file": "ideas/2026-08-11.md",
+      "idea_heading": "### 4. Bounded Risk-Escalation Agent Template — [Stretch]",
+      "idea_name": "Bounded Risk-Escalation Agent Template",
+      "recurred_days": 3,
+      "queued_at": "2026-08-13",
+      "expires_at": "2026-09-03",
+      "status": "pending"
+    }
+  ]
 }
