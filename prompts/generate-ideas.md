@@ -4,7 +4,11 @@
      the prompt-version marker at the foot in the same change.
      Reconciled from the live payload on 2026-08-04, after the two copies had
      drifted apart unnoticed: this file had lost the branch rule, the commit
-     step, the required per-idea format, and the competence prohibition. -->
+     step, the required per-idea format, and the competence prohibition.
+     Drifted again by 2026-08-14, in the other direction: the 2026-08-14 run
+     reported the payload lacks the prompt-version-echo section below. The
+     payload still enforces the per-idea format and the competence
+     prohibition; the echo section is the known gap. Not yet pasted across. -->
 
 # Daily Idea Engine
 
@@ -120,9 +124,13 @@ Three reasons this is absolute:
 1. You generate these ideas FROM `profile.md`. Any competence you infer is
    `profile.md`'s own claim echoed back under a new name. A separate quiz exists
    to TEST that claim — it cannot test a copy of itself.
-2. The quiz queue IS `grep "competence: unlabeled"`. Any value you write here
-   removes the idea from the only process that could ever correct it. A wrong
-   guess isn't merely wrong; it is permanent and invisible.
+2. A guessed value is byte-identical to an earned one, and nothing downstream
+   can tell them apart. The quiz reads `quiz-queue.json`, which the weekly
+   routine stocks from concepts that recurred on ≥2 distinct days — competence
+   is not what selects an idea for measurement, so a wrong guess here is not
+   reliably corrected by the quiz reaching that idea later, and most ideas
+   never recur and are never queued at all. A wrong guess isn't merely wrong;
+   it is permanent and invisible.
 3. Downstream features watch competence MOVEMENT, not competence. A guessed
    baseline manufactures a false movement — which is how an unearned claim
    reaches an outbound résumé or LinkedIn line.
@@ -169,4 +177,4 @@ measurement loop rests on. Echoing the marker makes any future divergence
 self-announcing: if a run's marker doesn't match the marker in the repo copy,
 the payload is stale.
 
-<!-- prompt-version: 2026-08-09.1 -->
+<!-- prompt-version: 2026-08-14.1 -->
