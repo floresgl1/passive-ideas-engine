@@ -10,11 +10,13 @@
      prompts/weekly-routine.md were both pasted across, and the live payloads
      were then read back and verified identical to their repo copies. No known
      drift in either prompt.
-     One deliberate exception: this header correction is comment-only, so it did
-     NOT bump the marker — both copies stay matched at 2026-08-14.1 and no false
-     drift signal fires. The live payload's copy of this note therefore still
-     reads "Not yet pasted across" until the next substantive change carries it
-     over. That single stale line is expected; it is not evidence of drift. -->
+     One note on discipline: comment-only corrections to this header do not bump
+     the marker, so the two copies stay matched and no false drift signal fires.
+     The marker tracks behavioral drift, not prose.
+     Keep this header's claims durable — state rules, never the state of a
+     pending task. Twice now a note describing a transient condition ("not yet
+     pasted across") outlived the condition and became the only false thing in
+     the file, which is exactly what a run reading this header cannot afford. -->
 
 # Daily Idea Engine
 
