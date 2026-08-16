@@ -143,3 +143,32 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   in `docs/PIPELINE.md`. No dedicated test suite for the sub-agent
   definition itself (a prompt file, not executable code); no separate design
   doc predates this commit beyond the sub-agent file's own inline spec.
+
+## 2026-08-16 — circuit-simulator (dependent sources)
+- axis: hardware / circuit analysis
+- transition: [emerging] → [strong]
+- artifact: circuit-simulator (Python `circuitsim` package)
+- evidence: Python + NumPy. PR #2 (`current-sources` branch → `main`),
+  merge commit `ef963c27` on 2026-08-14, 1,266 additions / 49 deletions
+  across 3 commits (`e8e12cb` four controlled sources, `ee7967f`
+  SPICE-style netlist reader + CLI, `0ec9f7c` ill-conditioning rejection).
+  Adds VCVS/VCCS/CCCS/CCVS (SPICE E/G/F/H) with four distinct MNA stamp
+  shapes — VCCS adds off-diagonal conductance into `G`, VCVS's gain goes
+  into `C` with no `B` counterpart, CCCS reaches into `B` to read another
+  element's branch current, CCVS is the only one that writes into `D`; a
+  netlist parser (`netlist.py`, new, 140 lines) that handles SPICE's
+  `m`-vs-`meg` trap and errors with line number and text on malformed
+  input; a CLI (`__main__.py`, new, 70 lines: `circuitsim netlist.cir`);
+  and `IllConditionedCircuitError`, which estimates relative solve error on
+  the *Ruiz-equilibrated* matrix rather than thresholding raw condition
+  number, so pure diagonal scaling (mixing a 1Ω resistor with a 1PΩ one)
+  isn't mistaken for genuine precision loss. Test suite grew from 26 to 68
+  (32 solver, 18 dependent-source — including an op-amp closed-loop-gain
+  convergence check and a gyrator, both physically-meaningful compositions,
+  plus a power-conservation check exercising all four source types at
+  once — and 18 netlist), all green, re-run and confirmed in a fresh venv
+  this session. Still no CI configured; no design doc predates the commits.
+  Closes the specific "no dependent sources" gap `profile.md`'s Keystone
+  note had named as the hardware axis's next-highest-leverage move; the
+  visualizer and interactivity phases (3–4 of the self-scoped 5-phase plan)
+  remain unshipped.

@@ -8,6 +8,15 @@
       "queued_at": "2026-08-13",
       "expires_at": "2026-09-03",
       "status": "pending"
+    },
+    {
+      "idea_file": "ideas/2026-08-14.md",
+      "idea_heading": "### 3. Dependent-Source SPICE CLI — [Experience]",
+      "idea_name": "Dependent-Source SPICE CLI",
+      "recurred_days": 2,
+      "queued_at": "2026-08-16",
+      "expires_at": "2026-09-06",
+      "status": "pending"
     }
   ]
 }
