@@ -5,10 +5,16 @@
      Reconciled from the live payload on 2026-08-04, after the two copies had
      drifted apart unnoticed: this file had lost the branch rule, the commit
      step, the required per-idea format, and the competence prohibition.
-     Drifted again by 2026-08-14, in the other direction: the 2026-08-14 run
-     reported the payload lacks the prompt-version-echo section below. The
-     payload still enforces the per-idea format and the competence
-     prohibition; the echo section is the known gap. Not yet pasted across. -->
+     Drifted again by 2026-08-14, in the other direction: the payload lacked
+     the prompt-version-echo section below. RESOLVED 2026-08-16 — this file and
+     prompts/weekly-routine.md were both pasted across, and the live payloads
+     were then read back and verified identical to their repo copies. No known
+     drift in either prompt.
+     One deliberate exception: this header correction is comment-only, so it did
+     NOT bump the marker — both copies stay matched at 2026-08-14.1 and no false
+     drift signal fires. The live payload's copy of this note therefore still
+     reads "Not yet pasted across" until the next substantive change carries it
+     over. That single stale line is expected; it is not evidence of drift. -->
 
 # Daily Idea Engine
 
