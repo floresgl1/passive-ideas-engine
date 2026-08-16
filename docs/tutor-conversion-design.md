@@ -1,4 +1,4 @@
-<!-- design-version: 2026-08-15.3 -->
+<!-- design-version: 2026-08-16.1 -->
 # Tutor-Conversion Design
 
 **Status:** Recorded design, not a task list. **Correction (.3): repo-discovery
@@ -27,6 +27,23 @@ precondition**: whether #0 is a foundation or an ornament is an *empirical*
 question no existing data can answer. Both new sections at the end. Everything
 above stands; the "build order" is now explicitly gated on evidence, not a
 keyboard or discovery.
+
+**Revision note (2026-08-16.1):** No design conclusion changes. This revision is
+entirely about what is and is not blocking, and it corrects one wrong assumption
+that was quietly costing weeks.
+
+- **Prerequisite 1 (reconcile the weekly payload) is CLOSED and verified.**
+- **Prerequisite 2 is REWRITTEN.** .3 framed "let the loop close a few cycles" as
+  something that would happen given time. It would not have. The loop had never
+  closed because **nothing was scheduled to run it** — the `Quiz - Probe` and
+  `Quiz - Collect` triggers specified in `docs/quiz-bot-setup.md` §4 had never
+  been created. The prompts existed; the runners did not. Both have now been
+  created, but **the loop has still not closed once**, so nothing downstream of
+  that evidence has moved.
+- **Stale sequencing claim corrected.** The summary table's footnote still said
+  "nothing here is built until repo-discovery lands," which .3 had already
+  overturned in its own header. Fixed, because left standing it points the next
+  reader at #1 — the wrong blocker.
 
 ---
 
@@ -226,9 +243,13 @@ recorded gap.
 | #7 RTL tiers | Deferred (needs #0's object) | After #0 + discovery |
 
 **This is 5+ of the items sitting at the foundation — not a small first build.**
-Nothing here is built until repo-discovery lands (and #0/#7 may loosen even that
-dependency). Captured so it's ready when the build unblocks — not a signal to
-start.
+Captured so it's ready when the build unblocks — not a signal to start.
+
+**Corrected in .1:** this footnote previously read "nothing here is built until
+repo-discovery lands." That contradicted .3's own header correction and is wrong.
+Repo-discovery gates only #7's `ship_target`. The live gate is the split-rate
+evidence described below, which cannot begin accumulating until the quiz loop
+closes at least once.
 
 ---
 
@@ -296,18 +317,70 @@ Sunday re-clustering and measuring the split rate.
 
 ### What actually moves #0 forward (both cheap, both in your control)
 
-1. **Reconcile the drifted weekly payload.** `cbc5d19` (most recent weekly run)
-   records delivered payload `2026-08-04.2` vs. repo copy `2026-08-10.1`. Concept-ID
-   minting will live in A7, inside that payload. Designing minting against
-   `weekly-routine.md` today is designing against a file that is not what executes.
-   Reconcile first so the file you edit is the file that runs.
-2. **Let the async loop close a few real cycles.** As of this writing the loop has
-   **never** produced a verdict through a queue entry: `quiz-queue.json` holds one
-   `pending` entry (queued 08-13, expires 09-03), `quiz-state.json` is idle, and all
-   four existing verdicts predate the queue (came via the grep-oldest-first path).
-   Building history for a pipeline that hasn't demonstrably written one verdict is
-   building against a guess. Close the loop, then watch what re-clustering does to
-   concept boundaries.
+**1. Reconcile the drifted weekly payload. — CLOSED 2026-08-16.**
+
+Concept-ID minting will live in A7, inside the weekly payload, so designing
+minting against `weekly-routine.md` while that file was not what executes would
+have been designing against fiction. Both payloads were pasted across and then
+**read back and verified identical** to their repo copies:
+
+| Trigger | Was | Now |
+|---|---|---|
+| Ideas - Weekly | `2026-08-04.2` | `2026-08-10.1` |
+| Ideas - Daily | no marker at all | `2026-08-14.1` |
+
+The weekly payload now actually contains A7. Worth recording plainly: **the live
+weekly routine had never once stocked the queue on its own.** Both existing
+`quiz-queue.json` entries exist because a session noticed the staleness and
+hand-overrode its own payload — four separate runs did this rather than fix it,
+because the tracking issue (#13, now closed) misdiagnosed the blocker as "session
+tooling can't write the trigger config." Reading the live payload was always
+possible; the write is blocked by an ownership rule (`created_via: http_api`).
+A wrong blocker note cost twelve days. The design lesson generalizes: **record
+why something is blocked precisely, or the note becomes the blocker.**
+
+**2. Let the async loop close a few real cycles. — UNBLOCKED 2026-08-16, NOT YET
+DEMONSTRATED.**
+
+.3 treated this as a waiting problem. It was a wiring problem. The loop had never
+closed because **no scheduled runner existed**: `prompts/quiz-probe.md` and
+`prompts/quiz-collect.md` were drafting surfaces for the `Quiz - Probe` and
+`Quiz - Collect` triggers described in `docs/quiz-bot-setup.md` §4, and neither
+trigger had ever been created. `quiz-state.json` sat `idle` while entries
+accumulated — not a throughput ceiling, an absent process.
+
+Both triggers were created 2026-08-16, with the Discord bot and its environment
+variables. **Status: created, unverified.** The trigger-management tooling was
+unavailable at the time of writing, and env var *values* are never exposed in a
+payload dump in any case — so correctness here is provable only by a run, never
+by inspection.
+
+State at time of writing:
+
+- `quiz-state.json`: `stage: "idle"`, all fields null.
+- `quiz-queue.json`: **two** `pending` entries — *Bounded Risk-Escalation Agent
+  Template* (queued 08-13, expires **2026-09-03**) and *Dependent-Source SPICE
+  CLI* (queued 08-16, expires **2026-09-06**).
+- All four existing verdicts predate the queue and came via the retired
+  grep-oldest-first path.
+
+First probe should fire **Monday 2026-08-17, 15:00 UTC** (`0 15 * * 1,3,5`), an
+hour after the daily ideas run. A healthy first run produces three things
+together: the probe in the quiz channel, a `Quiz probe posted: …` commit on
+`main`, and `quiz-state.json` flipped to `awaiting_free_response` with a non-null
+`probe_message_id`.
+
+**The failure mode to watch is silent.** If the bot's MESSAGE CONTENT INTENT is
+off, every reply reads as an empty string; a blank is not a pass, so every answer
+routes to the MC probe. That yields verdicts that look legitimate and measure
+nothing — which would poison the very split-rate data this section exists to
+collect. The tell: you answer in real words and get a multiple-choice question
+back.
+
+**The expiry deadlines are the real clock.** If no probe is answered, both
+entries age out (09-03, 09-06) having recorded nothing — expiry measures
+attendance, not knowledge. The loop would then be exactly as unclosed as it is
+today, minus two queue entries.
 
 ### Five decisions to settle while waiting (none need a keyboard)
 
@@ -333,3 +406,15 @@ Sunday re-clustering and measuring the split rate.
 settled. It is not buildable yet — not for lack of a keyboard, but for lack of
 evidence that concept identity is stable enough to deserve a primary key. Run the
 loop; measure the split rate; then decide foundation vs. ornament.
+
+**As of .1 the stopping point has moved, but not far.** "Run the loop" changed
+from *blocked* to *merely pending*: the runners now exist, where before this was
+an instruction with nothing to carry it out. What has NOT changed is that zero
+cycles have closed and zero split-rate data exists. The earliest an honest
+foundation-vs-ornament call could be made is several Sundays out — the first
+re-clustering observation is **2026-08-23**, and distinguishing "concepts hold"
+from "concepts split" needs concepts recurring across multiple weeks, not one.
+
+Nothing in "The foundation" section should be started before that call. The four
+unsettled decisions in the next section are the only work this doc licenses
+today, and none of them need a keyboard, credentials, or the loop.
