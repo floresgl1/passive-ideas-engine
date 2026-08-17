@@ -1,10 +1,3 @@
 {
-  "stage": "awaiting_mc",
-  "idea_file": "ideas/2026-08-14.md",
-  "idea_heading": "### 3. Dependent-Source SPICE CLI — [Experience]",
-  "probe_text": "**Dependent-Source SPICE CLI** — [Experience]\n\nTwo of the four source types you're merging depend on the current flowing through some other branch elsewhere in the circuit, not a voltage at a node. Walk me through how your solver actually gets that current value into the set of equations it's solving — what has to exist among your unknowns for that to work?",
-  "probe_message_id": "1538730449763958907",
-  "mc_message_id": "1538919737340334140",
-  "posted_at": "2026-08-17T02:05:27Z",
-  "expires_at": "2026-08-20T14:37:37Z"
+  "stage": "idle"
 }

@@ -16,7 +16,7 @@
       "recurred_days": 2,
       "queued_at": "2026-08-16",
       "expires_at": "2026-09-06",
-      "status": "pending"
+      "status": "labeled"
     }
   ]
 }
