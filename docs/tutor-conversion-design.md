@@ -1,4 +1,4 @@
-<!-- design-version: 2026-08-16.1 -->
+<!-- design-version: 2026-08-20.1 -->
 # Tutor-Conversion Design
 
 **Status:** Recorded design, not a task list. **Correction (.3): repo-discovery
@@ -7,8 +7,9 @@ does NOT gate #0.** #0's cluster side draws only from `ideas/` and
 pinned to. Discovery starts mattering only at the rung record's `ship_target`
 field ("what shipped artifact discharges this rung"), which is #7. The real gate
 on #0 is **evidence that concept identity is stable enough to be worth a primary
-key** — see "The split-rate precondition" below. That evidence does not exist yet
-because the async loop has never closed a full cycle.
+key** — see "The split-rate precondition" below. The async loop has now closed
+two full cycles (both `no knowledge`, 2026-08-17); split-rate observation begins
+**2026-08-23** at the first re-clustering.
 
 **Revision note (2026-08-15.2):** Folds in a repo-checked critique. Changes from
 .1: added **#0 concept identity** as the true bottom of the stack; **split #5**
@@ -44,6 +45,20 @@ that was quietly costing weeks.
   "nothing here is built until repo-discovery lands," which .3 had already
   overturned in its own header. Fixed, because left standing it points the next
   reader at #1 — the wrong blocker.
+
+**Revision note (2026-08-20.1):** No structural changes. This revision settles
+the four open design decisions and updates prerequisite 2 to reflect the loop
+having closed.
+
+- **Prerequisite 2 is DEMONSTRATED.** The quiz loop closed two full cycles on
+  2026-08-17: *Bounded Risk-Escalation Agent Template* (probe → free-response
+  miss → MC → `no knowledge`) and *Dependent-Source SPICE CLI* (same path →
+  `no knowledge`). Both `quiz-queue.json` entries are now `"labeled"`;
+  `quiz-state.json` is `"idle"`. The runners work. The next queue stock comes
+  from the 2026-08-23 weekly re-clustering.
+- **Decisions 1, 2, 3, 5 are SETTLED.** See "Settled decisions" section below.
+  All four decisions in the waiting list that were open in .1 are now closed;
+  only the split-rate evidence gates further work.
 
 ---
 
@@ -339,8 +354,7 @@ possible; the write is blocked by an ownership rule (`created_via: http_api`).
 A wrong blocker note cost twelve days. The design lesson generalizes: **record
 why something is blocked precisely, or the note becomes the blocker.**
 
-**2. Let the async loop close a few real cycles. — UNBLOCKED 2026-08-16, NOT YET
-DEMONSTRATED.**
+**2. Let the async loop close a few real cycles. — CLOSED 2026-08-17.**
 
 .3 treated this as a waiting problem. It was a wiring problem. The loop had never
 closed because **no scheduled runner existed**: `prompts/quiz-probe.md` and
@@ -350,71 +364,132 @@ trigger had ever been created. `quiz-state.json` sat `idle` while entries
 accumulated — not a throughput ceiling, an absent process.
 
 Both triggers were created 2026-08-16, with the Discord bot and its environment
-variables. **Status: created, unverified.** The trigger-management tooling was
-unavailable at the time of writing, and env var *values* are never exposed in a
-payload dump in any case — so correctness here is provable only by a run, never
-by inspection.
+variables. Two full cycles closed on 2026-08-17:
 
-State at time of writing:
+| Entry | Probe posted | Free-response | MC probe | Verdict |
+|---|---|---|---|---|
+| Bounded Risk-Escalation Agent Template | 08-16 23:31 | missed bar | posted 08-16 23:57 | `no knowledge` (08-17 00:06) |
+| Dependent-Source SPICE CLI | 08-17 02:05 | missed bar | posted 08-17 14:37 | `no knowledge` (08-17 17:49) |
 
-- `quiz-state.json`: `stage: "idle"`, all fields null.
-- `quiz-queue.json`: **two** `pending` entries — *Bounded Risk-Escalation Agent
-  Template* (queued 08-13, expires **2026-09-03**) and *Dependent-Source SPICE
-  CLI* (queued 08-16, expires **2026-09-06**).
-- All four existing verdicts predate the queue and came via the retired
-  grep-oldest-first path.
+Both `quiz-queue.json` entries are now `"labeled"`. `quiz-state.json` is back to
+`"idle"`. The runners are verified working. The next queue stock comes from the
+2026-08-23 weekly re-clustering (A7).
 
-First probe should fire **Monday 2026-08-17, 15:00 UTC** (`0 15 * * 1,3,5`), an
-hour after the daily ideas run. A healthy first run produces three things
-together: the probe in the quiz channel, a `Quiz probe posted: …` commit on
-`main`, and `quiz-state.json` flipped to `awaiting_free_response` with a non-null
-`probe_message_id`.
+**The failure mode to continue watching is silent.** If the bot's MESSAGE
+CONTENT INTENT is off, every reply reads as an empty string; a blank is not a
+pass, so every answer routes to the MC probe. That yields verdicts that look
+legitimate and measure nothing — which would poison the very split-rate data
+this section exists to collect. The tell: you answer in real words and get a
+multiple-choice question back. Both cycles above routed to MC; that is
+consistent with either "the free-response genuinely missed the bar" or "the
+intent was off and the content was blank." The next cycle should be watched
+for this.
 
-**The failure mode to watch is silent.** If the bot's MESSAGE CONTENT INTENT is
-off, every reply reads as an empty string; a blank is not a pass, so every answer
-routes to the MC probe. That yields verdicts that look legitimate and measure
-nothing — which would poison the very split-rate data this section exists to
-collect. The tell: you answer in real words and get a multiple-choice question
-back.
+### Settled decisions (all four closed as of 2026-08-20.1)
 
-**The expiry deadlines are the real clock.** If no probe is answered, both
-entries age out (09-03, 09-06) having recorded nothing — expiry measures
-attendance, not knowledge. The loop would then be exactly as unclosed as it is
-today, minus two queue entries.
+**1. Minting authority + write-scope amendment. — SETTLED.**
 
-### Five decisions to settle while waiting (none need a keyboard)
+The weekly routine mints concept records; it may **never** write history. Only
+grading paths (`quiz-collect.md`) write history. This follows the `quiz-queue.json`
+precedent: the queue was justified as writable by the weekly routine precisely
+because *"it is a DERIVED index that points AT ideas, and holds no measurement of
+its own"* (`weekly-routine.md:22-25`). A concept-identity record is the same kind
+of object — a derived index that says "these ideas are the same concept," not a
+measurement of what anyone knows.
 
-1. **Minting authority + write-scope amendment.** Weekly may mint concept records;
-   weekly may **never** write history; only grading paths write history. Must be
-   written down first, or the first commit silently breaches the rule the queue's
-   write-scope justification depends on.
-2. **Epoch decision.** History is forward-only, no backfill. The four pre-queue
-   verdicts have no derivable cluster identity even in principle, so #0's start date
-   is the tutor's epoch; everything before is permanently outside the loop. A
-   decision, not a discovery.
-3. **Poisoned-by-default.** Teach-posts from every prior verdict already sit in the
-   channel unrecorded, so every pre-#0 subject is un-re-testable. At launch the
-   re-test queue is legitimately **empty** — #2's acceptance criteria must not expect
-   otherwise.
-4. **Merge/split policy.** Settled above.
-5. **Tolerance for a stale writer.** Paste-across has no atomic rollout; during a
-   rollout some routines run history-aware and some don't. The history file must be
-   additive and safe against a writer that doesn't know it exists, and every reader
-   must handle "no record."
+Write-scope amendments when #0 is built:
 
-**Stopping point:** #0 is designed and its hardest question (merge/split) is
-settled. It is not buildable yet — not for lack of a keyboard, but for lack of
-evidence that concept identity is stable enough to deserve a primary key. Run the
-loop; measure the split rate; then decide foundation vs. ornament.
+- **`weekly-routine.md`** adds: the concept-record file (e.g. `concepts.json`).
+- **`quiz-collect.md`** adds: append-only writes to the history file, scoped to
+  the single concept named in `quiz-state.json`.
+- **`quiz-probe.md`** adds: nothing. It reads concept records for
+  selection/arbitration (#2) but never writes them.
 
-**As of .1 the stopping point has moved, but not far.** "Run the loop" changed
-from *blocked* to *merely pending*: the runners now exist, where before this was
-an instruction with nothing to carry it out. What has NOT changed is that zero
-cycles have closed and zero split-rate data exists. The earliest an honest
-foundation-vs-ornament call could be made is several Sundays out — the first
-re-clustering observation is **2026-08-23**, and distinguishing "concepts hold"
-from "concepts split" needs concepts recurring across multiple weeks, not one.
+The load-bearing line: **the weekly routine may never touch the history file, even
+to initialize a record.** An empty history is "never measured," which is true, not
+a gap to backfill. This mirrors the existing rule that the weekly routine never
+touches `ideas/` files.
 
-Nothing in "The foundation" section should be started before that call. The four
-unsettled decisions in the next section are the only work this doc licenses
-today, and none of them need a keyboard, credentials, or the loop.
+**2. Epoch decision. — SETTLED.**
+
+History is forward-only. The tutor's epoch = the date the first concept ID is
+minted (which will be the first Sunday after #0 is built). Everything before is
+permanently outside the loop.
+
+The eight pre-epoch verdicts (Backtest Validity Toolkit, Secure Multi-Tenant SaaS
+Starter Kit, Swing-Check API, Unattended-Pipeline Watchdog, Circuit Sandbox, plus
+Bounded Risk-Escalation Agent Template and Dependent-Source SPICE CLI from the
+queue era) were all measured before concept IDs exist. Even the two queue-era
+verdicts were identified by `idea_file` + `idea_heading`, not by a durable concept
+key — attributing them to a future concept ID would be fabricating a relationship
+that was never captured.
+
+On launch day, every concept's history starts at zero. That is honest — the first
+measurement under the new system is the first honest one.
+
+**3. Poisoned-by-default. — SETTLED.**
+
+Every verdict to date has a teach-post in the Discord channel (`quiz-collect.md`
+Step 5, `/quiz` Step 7). Those are permanent, unretractable answer keys (#5b). The
+concepts they cover can never be honestly re-tested by drawing from the channel
+history, because the mechanism was taught in the same place the reply will be read.
+
+Accepted consequences:
+
+- At tutor launch, the set of concepts eligible for re-testing is **legitimately
+  zero**.
+- The first re-testable concepts will be ones quizzed *after* the tutor has a #5b
+  strategy (re-framing to test a different hard part, or accepting
+  recognition-only measurement).
+- **#2's acceptance criteria must be written to expect an empty re-test queue at
+  launch.** A test that asserts "the re-test path works when it has items" will
+  fail on day one and look broken when it is actually correct.
+
+This is exactly the scenario `quiz-collect.md:158` predicted. Making it an
+explicit acceptance criterion closes the loop on that prediction.
+
+**4. Merge/split policy. — SETTLED** (in .3, see above).
+
+**5. Tolerance for a stale writer. — SETTLED.**
+
+The paste-across deployment model means there is always a window where one trigger
+runs the new payload and another runs the old. Two rules make the history file safe
+against a writer that does not know it exists:
+
+> **File format:** JSONL — one JSON object per line, one record per append. Never
+> a structured JSON object that requires reading to update. An append cannot
+> corrupt what is already there, and a writer that does not know about the file
+> simply does not append — no damage.
+
+> **Reader contract:** every reader treats "no record for this concept" as "never
+> measured." This is the correct interpretation (absence of evidence, not evidence
+> of absence), so it is not a special case — it is the default. No reader should
+> ever distinguish "the file exists but has no entry" from "the file does not
+> exist."
+
+Worst case during rollout: a grading event happens while `quiz-collect` is still
+running the old payload. The verdict lands in `ideas/` (that path is unchanged)
+but no history entry is appended. That is an **undercount**, not a miscount — the
+concept looks like it has fewer measurements than it does, which biases toward
+re-testing it sooner than necessary. That is the safe direction. And the rollout
+window is short (minutes), so the probability of a grading event during it is low
+— the quiz loop fires three times a week.
+
+**Stopping point:** #0 is designed, its hardest question (merge/split) is
+settled, and all five waiting-period decisions are now closed. It is not buildable
+yet — not for lack of decisions, but for lack of evidence that concept identity
+is stable enough to deserve a primary key.
+
+**As of .1 the loop was unblocked but untested. As of .2 (2026-08-20) the loop
+has closed two full cycles** — both on 2026-08-17, both `no knowledge`. The
+runners are verified working. Both queue entries are consumed. The queue will be
+restocked on **2026-08-23** (next Sunday's re-clustering), and that is the first
+opportunity to observe whether the weekly routine holds concepts stable or splits
+them.
+
+Distinguishing "concepts hold" from "concepts split" needs concepts recurring
+across multiple weeks, not one. The earliest an honest foundation-vs-ornament
+call could be made is several Sundays out.
+
+**Nothing in "The foundation" section should be started before that call.** There
+is no remaining design work this doc can license today — only observation.
