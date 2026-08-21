@@ -17,6 +17,24 @@
       "queued_at": "2026-08-16",
       "expires_at": "2026-09-06",
       "status": "labeled"
+    },
+    {
+      "idea_file": "ideas/2026-08-20.md",
+      "idea_heading": "### 1. Netlist-to-Web Circuit Visualizer — [Stretch]",
+      "idea_name": "Netlist-to-Web Circuit Visualizer",
+      "recurred_days": 2,
+      "queued_at": "2026-08-21",
+      "expires_at": "2026-09-11",
+      "status": "pending"
+    },
+    {
+      "idea_file": "ideas/2026-08-20.md",
+      "idea_heading": "### 2. AI Ops Sub-Agent Template Pack — [Leverage]",
+      "idea_name": "AI Ops Sub-Agent Template Pack",
+      "recurred_days": 2,
+      "queued_at": "2026-08-21",
+      "expires_at": "2026-09-11",
+      "status": "pending"
     }
   ]
 }

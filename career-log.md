@@ -172,3 +172,35 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   note had named as the hardware axis's next-highest-leverage move; the
   visualizer and interactivity phases (3–4 of the self-scoped 5-phase plan)
   remain unshipped.
+
+## 2026-08-21 — poker-llm
+- axis: LLM integration / applied game-engine implementation
+- transition: — → [emerging]
+- artifact: poker-llm (new repo)
+- evidence: Python (`engine/`, `game_management/`, `llm_integration/`) +
+  FastAPI backend + Vite/React 19/TypeScript frontend. 4 commits,
+  2026-08-17 18:13 UTC through 2026-08-18 00:38 UTC (`c3ac9a6` poker state
+  → `b0006eb` prompt builder/enums/tests → `8b99d0f` dashboard + FastAPI
+  backend → `49a077b` file-structure refactor). Complete Texas Hold'em
+  rules built from scratch: deck management, a hand evaluator covering
+  high-card through royal flush with kicker comparison, an action handler
+  for fold/check/call/raise with legal-action validation. A model-agnostic
+  LLM player interface with Claude/GPT-4/random/call-any adapters, and a
+  strategic prompt builder computing table position, stack depth
+  (short/medium/deep), pot odds and equity needed, and opponent
+  aggression/fold-rate derived from the last 20 actions. Orchestration for
+  single hands, multi-hand sessions, head-to-head/round-robin model
+  comparison, and a 10-level blind-escalation tournament with elimination
+  tracking — all with JSON export. 5 pytest files (test_engine,
+  test_integration, test_advanced_prompts, test_model_comparison,
+  test_tournament); the repo's own docs report "100% pass rate" and "all
+  tests passed," but that run was not independently reproduced in this
+  session. No CI configured. Two concrete honesty gaps found on
+  inspection, not taken on faith: `evaluation/evaluation_metrics.py` and
+  `evaluation/logging_utils.py` are committed as 0-byte files despite a
+  commit message ("Add logging utilities and evaluation metrics")
+  describing them as implemented; and the React dashboard imports
+  `@/components/ui/button` and `@/components/ui/dialog` from shadcn/ui,
+  which the README itself says are "not vendored yet," so the frontend
+  will not build from a clean checkout without an extra manual step. No
+  production deployment; no design doc predates the implementing commits.
