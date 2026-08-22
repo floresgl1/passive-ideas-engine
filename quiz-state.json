@@ -1,9 +1,10 @@
 {
-  "stage": "awaiting_free_response",
+  "stage": "awaiting_mc",
   "idea_file": "ideas/2026-08-20.md",
   "idea_heading": "### 1. Netlist-to-Web Circuit Visualizer — [Stretch]",
   "probe_text": "A user pastes in a netlist that has no coordinates anywhere in it — just component names and which nodes they connect to. Walk me through what has to happen, step by step, before there's anything on screen that looks like an actual circuit diagram, not just a list of parts.",
   "probe_message_id": "1540377360828735518",
+  "mc_message_id": "1540520291770433667",
   "posted_at": "2026-08-21T15:09:41Z",
-  "expires_at": "2026-08-24T15:09:41Z"
+  "expires_at": "2026-08-25T00:37:31Z"
 }
