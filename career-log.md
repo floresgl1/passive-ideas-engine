@@ -204,3 +204,74 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   which the README itself says are "not vendored yet," so the frontend
   will not build from a clean checkout without an extra manual step. No
   production deployment; no design doc predates the implementing commits.
+
+## 2026-08-30 — circuit-simulator (web/layout.py, web/render_svg.py)
+- axis: hardware / schematic diagram layout & rendering
+- transition: — → [emerging]
+- artifact: circuit-simulator (Python `circuitsim.web` subpackage)
+- evidence: Python, no new runtime dependencies. Single commit `efb48c2`,
+  2026-08-28. Adds `web/layout.py` (473 lines) — a reasoned breadth-first,
+  net-per-column layout: ground is drawn as a rail rather than a point
+  (the highest-degree net in almost every circuit), nets are ordered
+  breadth-first from the first voltage source's positive terminal so
+  sources land left and the circuit reads left to right, and control
+  terminals (which carry no current) are ranked alongside real terminals
+  but rendered as dashed sense lines — and `web/render_svg.py` (269
+  lines), a dependency-free SVG generator with symbol-rotation math so a
+  rotated component's labels stay upright. `web` imports only `circuit`
+  and does not solve anything it draws. Test suite grew from 68 to 125
+  (35 new in `test_layout.py`, 235 lines); all 125 re-run and confirmed
+  green this session (`pytest tests/`, fresh `pip install -e ".[dev]"`).
+  No CI configured; no design doc predates the commit. Not deployed — a
+  library module and a `scripts/render_fixture.py` CLI script, no
+  hosted output, no users.
+
+## 2026-08-30 — CoCircuit (new repo)
+- axis: hardware / visual JS circuit simulator (Direction & Intent graduation)
+- transition: Direction & Intent → [emerging]
+- artifact: CoCircuit (new repo)
+- evidence: JavaScript, React 19 + Vite, `@xyflow/react` for the node
+  canvas. 6 commits, 2026-08-28 22:51 through 2026-08-29 15:44 (local
+  time): `9ba3d7b` initial app — component catalog, netlist model, a
+  from-scratch DC operating-point solver (`analysis.js`, 313 lines) and
+  the first MCP tool surface (~4.2k lines total); `67c3cf4` viewport-follow
+  for agent edits; `bc77ae5` undo/redo history; `4a74e4e` `TESTING.md`;
+  `710cf9f`/`aba361b` error-message and voltage-floor polish. The solver
+  is topology-general Modified Nodal Analysis by Gauss-Jordan elimination
+  with partial pivoting, a `GMIN` (1e-12) leak-to-ground regularizer so a
+  subcircuit with no resistive path to reference doesn't singular-out the
+  matrix, and separate current/voltage noise floors (1e-9 A, 1e-6 V) so
+  the regularizer's own picoamp/nanovolt artifacts aren't reported as
+  real readings — independent of, and in a different language from,
+  circuit-simulator's Python solver. `npm run build` succeeds (verified
+  this session, 291 modules, no errors). **No automated tests** —
+  `TESTING.md` documents four manual ways to drive the app as an agent
+  would (browser console snippet, browser extension, native WebMCP);
+  nothing runs in CI, no test files exist in the repo. No design doc
+  predates the code. Not deployed — local dev only (`npm run dev`), no
+  users, no production traffic. Graduates the "Visual JS circuit
+  simulator" Direction & Intent line's remaining "JS/visual front end +
+  interactivity" want; circuit-simulator's own phase-3 visualizer (see
+  the paired 2026-08-30 record above) shipped separately, in Python.
+
+## 2026-08-30 — CoCircuit (WebMCP tool surface)
+- axis: AI agent tooling / agent-accessible application interfaces
+- transition: — → [emerging]
+- artifact: CoCircuit (`src/mcp/tools.js`, `src/mcp/useWebMCP.js`)
+- evidence: JavaScript, `@mcp-b/global` (WebMCP). Same 6-commit range as
+  the record above (`9ba3d7b` through `aba361b`, 2026-08-28–2026-08-29).
+  `src/mcp/tools.js` (302 lines) exposes 9 tools (add/modify/wire a
+  component, query the live circuit, etc., per `TESTING.md`'s own tool
+  listing) to any browser-connected MCP client — verified manually this
+  session via the documented browser-console driver pattern, not by an
+  automated suite. A dedicated `FollowAgent` component (`67c3cf4`) keeps
+  the canvas viewport synced to edits the agent makes rather than the
+  human's own scroll/pan state, and two later commits (`710cf9f`,
+  `aba361b`) specifically rewrote error messages and added voltage-floor
+  handling to make tool responses actionable by a tool-calling model
+  rather than a human reading a console. This is the first shipped
+  instance of building a product surface *for* an agent to operate live
+  in a user's own session — distinct from the already-`[strong]`
+  "AI-assisted development workflow" skill, which is about using scoped
+  sub-agents to build software rather than building software agents can
+  drive. No automated tests; not deployed; no design doc.

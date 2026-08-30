@@ -35,6 +35,15 @@
       "queued_at": "2026-08-21",
       "expires_at": "2026-09-11",
       "status": "pending"
+    },
+    {
+      "idea_file": "ideas/2026-08-28.md",
+      "idea_heading": "### 1. Bilateral Pose-Orientation Library — [Leverage]",
+      "idea_name": "Bilateral Pose-Orientation Library",
+      "recurred_days": 2,
+      "queued_at": "2026-08-30",
+      "expires_at": "2026-09-20",
+      "status": "pending"
     }
   ]
 }
