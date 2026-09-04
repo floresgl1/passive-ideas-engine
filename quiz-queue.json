@@ -44,6 +44,24 @@
       "queued_at": "2026-08-30",
       "expires_at": "2026-09-20",
       "status": "pending"
+    },
+    {
+      "idea_file": "ideas/2026-09-02.md",
+      "idea_heading": "### 2. Engineering-Notation Value Parser — [Passive]",
+      "idea_name": "Engineering-Notation Value Parser",
+      "recurred_days": 2,
+      "queued_at": "2026-09-04",
+      "expires_at": "2026-09-25",
+      "status": "pending"
+    },
+    {
+      "idea_file": "ideas/2026-09-04.md",
+      "idea_heading": "### 4. RLC Second-Order Extension — [Stretch]",
+      "idea_name": "RLC Second-Order Extension",
+      "recurred_days": 2,
+      "queued_at": "2026-09-04",
+      "expires_at": "2026-09-25",
+      "status": "pending"
     }
   ]
 }

@@ -275,3 +275,26 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   "AI-assisted development workflow" skill, which is about using scoped
   sub-agents to build software rather than building software agents can
   drive. No automated tests; not deployed; no design doc.
+
+## 2026-09-04 — studyprof (file upload + PDF text extraction)
+- axis: document ingestion / file-upload text extraction
+- transition: — → [emerging]
+- artifact: studyprof (new repo, `backend/main.py`)
+- evidence: Python, FastAPI + SQLAlchemy + Postgres (psycopg2), `uv`-managed
+  deps. 6 commits, 2026-09-01 03:20 UTC through 2026-09-03 04:44 UTC
+  (`4852ac0`..`86416ce`), all pushed directly to `main`, no PRs or branches.
+  Adds CRUD endpoints for users/subjects/quizzes, then a `POST /upload/`
+  endpoint (`1273046`, 2026-09-02) that accepts an uploaded file and
+  extracts its text via PyMuPDF (`fitz`) — a new runtime dependency
+  (`pymupdf>=1.28.2`, lockfile updated) — the first shipped file-ingestion/
+  document-processing capability in the profile, wired end to end from
+  route to extraction. No tests: no test directory or test files exist
+  anywhere in the repo. No CI: no `.github/workflows` configured. No design
+  doc. Not deployed: no Dockerfile, no deploy config observed. **Scope
+  note:** a later commit (`86416ce`, 2026-09-03) adds an OpenAI-SDK-
+  compatible `generate_question()` helper (actually pointed at a
+  third-party endpoint, `api.tokenfactory.nebius.com`, model
+  `Nemotron-3.5-Lightning` — not OpenAI's own API despite the commit
+  message) for LLM-backed quiz generation, but the function is not wired
+  to any FastAPI route in this window — it exists in code but is not
+  reachable, so it is not counted as demonstrated capability here.
