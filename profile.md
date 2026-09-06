@@ -158,4 +158,4 @@ Older work (Oct–Nov 2025) is tutorial-shaped: notebook-first ML/CV that stands
 ---
 
 ## last_refresh
-2026-09-04
+2026-09-06
