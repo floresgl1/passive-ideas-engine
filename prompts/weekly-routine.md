@@ -41,7 +41,6 @@ The daily routine emits every idea in exactly this shape:
 **Leverages:** ...
 **One new thing to learn:** ...
 **Why it's worth it:** ...
-**First step today:** ...
 **Keystone:** crosses the keystone — ...   (present only when true)
 ```
 
@@ -132,7 +131,7 @@ IF NO cluster clears the bar:
 Carry the PART A result (issue opened + title, or "no winner") into the Discord
 post at the end.
 
-### A7 — Stock the quiz queue
+### A5 — Stock the quiz queue
 
 You have just done the expensive part — clustering the week by concept and
 counting distinct days. The quiz queue is a by-product of that work, so build it
@@ -420,26 +419,30 @@ delivered. If the POST fails or returns anything else, say so explicitly in your
 run summary and include the status code — this routine runs unattended, so a
 post you assumed went out and never did is a silent failure.
 
-Structure it in two short sections:
+Format the ideas-channel post in EXACTLY this shape — this is the only weekly
+output the user reads, so it must be scannable:
 
-**This week's build** (from PART A):
-- If an issue was opened: the title, the winning capability, and how many days
-  it recurred. Lead with it if it crosses the keystone. Include the one-line
-  competence context.
-- If not: "No clear winner this week" + the top 2–3 clusters and day counts.
+```
+**📋 Weekly — YYYY-MM-DD**
 
-**Profile refresh** (from PART B):
-- What changed, what tier each change landed in, any graduations (especially a
-  hardware line moving [conceptual] → [strong], called out clearly), and any
-  duplicates collapsed. If nothing substantive changed, say exactly that.
-- **Career log** — the NUMBER of records appended to `career-log.md`, and each
-  transition named, or the words "no records appended".
+**This week's build:**
+<winner title + capability + day count, or "No clear winner" + top 2–3 clusters>
 
-  This count must match the shipped-tier movements and graduations you just
-  reported. If it does not, say so plainly in the post rather than reconciling
-  it silently. A mismatch between what you flagged and what you logged is the
-  one discrepancy that must never pass unnoticed — this routine runs unattended,
-  so a failure that stays quiet is a failure that persists.
+**Profile refresh:**
+<what changed and at which tier, or "No substantive change">
+Career log: <N records appended (name each transition), or "no records">
+
+<!-- prompt-version: XXXX-XX-XX.X -->
+```
+
+If an issue was opened, lead with its title and the winning capability. Lead
+with it if it crosses the keystone. Include the one-line competence context.
+If no winner: list the top 2–3 clusters with their day counts.
+
+The career-log count must match the shipped-tier movements you reported. If it
+does not, say so plainly in the post rather than reconciling silently — this
+routine runs unattended, so a failure that stays quiet is a failure that
+persists.
 
 Keep the whole message readable in one Discord message. Do NOT include queue
 counts here — those go to the quiz channel.
@@ -481,4 +484,4 @@ found by reading both side by side. Echoing the marker makes any future
 divergence self-announcing: if a run's marker doesn't match the marker in the
 repo copy, the payload is stale. No audit required to notice.
 
-<!-- prompt-version: 2026-08-10.1 -->
+<!-- prompt-version: 2026-09-09.1 -->
