@@ -84,6 +84,15 @@ digest.
 existing file in `ideas/`.** Older idea files carry quiz results written by
 another routine; editing them destroys measurements you cannot recover.
 
+### File structure
+
+The file starts with `# Daily Ideas — YYYY-MM-DD` and then the first idea
+heading immediately. No preamble, no deduplication narrative, no summary of
+what was mined or skipped. The dedup reasoning is work you do internally to
+pick good ideas — it is not output. If the profile is running thin and you
+want to flag that, do it in one sentence after the last idea, not before the
+first.
+
 ### Required per-idea format
 
 Emit every idea in EXACTLY this shape. Do not reword the field labels, reorder
@@ -119,32 +128,15 @@ is `### <N>. <Name> — [<Category>]` and nothing else.
 `competence` and `labeled_at` are STATE, not commentary. Write them exactly as
 shown — `unlabeled` and `—` — on every idea, every day, without exception.
 
-You MUST NOT pre-guess competence. Not `known` because `profile.md` makes the
-answer look obvious, and not `no knowledge` because the area looks unfamiliar.
-`unlabeled` does not mean "no knowledge" — it means NOT YET MEASURED. It is not
-a point on the scale, and nothing may be computed from it. `no knowledge` is a
-quiz VERDICT reached only after a free-response probe was blanked and a
-multiple-choice probe was also failed; writing it here records a test that
-never happened.
+You MUST NOT pre-guess competence. Any competence you infer here is
+`profile.md`'s own claim echoed back — a separate quiz exists to TEST that
+claim and cannot test a copy of itself. A guessed value is byte-identical to
+an earned one: nothing downstream can tell them apart, most ideas are never
+queued for a quiz, and downstream features watch competence MOVEMENT — so a
+wrong guess manufactures a false movement that can reach an outbound résumé.
+Always write `unlabeled` and `—`, no exceptions.
 
-Three reasons this is absolute:
-
-1. You generate these ideas FROM `profile.md`. Any competence you infer is
-   `profile.md`'s own claim echoed back under a new name. A separate quiz exists
-   to TEST that claim — it cannot test a copy of itself.
-2. A guessed value is byte-identical to an earned one, and nothing downstream
-   can tell them apart. The quiz reads `quiz-queue.json`, which the weekly
-   routine stocks from concepts that recurred on ≥2 distinct days — competence
-   is not what selects an idea for measurement, so a wrong guess here is not
-   reliably corrected by the quiz reaching that idea later, and most ideas
-   never recur and are never queued at all. A wrong guess isn't merely wrong;
-   it is permanent and invisible.
-3. Downstream features watch competence MOVEMENT, not competence. A guessed
-   baseline manufactures a false movement — which is how an unearned claim
-   reaches an outbound résumé or LinkedIn line.
-
-`labeled_at` stays `—` until a quiz writes a real date. A date here starts a
-decay clock from a measurement that never occurred.
+`labeled_at` stays `—` until a quiz writes a real date.
 
 ## Output — post to Discord
 After committing, post a concise version to the ideas channel.
@@ -164,13 +156,31 @@ A successful post returns HTTP 204. Confirm that code before reporting the post
 delivered. If the POST fails, say so explicitly in your run summary and include
 the status code rather than reporting a delivery that did not happen.
 
-Format: a one-line date header, then each idea as its [category] tag in bold,
-the idea in one sentence, and the first concrete step. Keep the whole message
-under ~1500 characters so it fits one Discord message. Lead with any idea
-flagged as crossing the keystone.
+Format the Discord post in EXACTLY this shape — this is the only output the
+user reads daily, so it must be scannable and concrete:
 
-Do NOT include `competence` or `labeled_at` in the Discord post — they are
-machine state for other routines, not morning reading.
+```
+**📅 YYYY-MM-DD**
+
+**[Category]** Idea Name
+<one sentence: what it is>
+→ First step: <concrete action>
+
+**[Category]** Idea Name
+<one sentence: what it is>
+→ First step: <concrete action>
+
+...
+
+<!-- prompt-version: XXXX-XX-XX.X -->
+```
+
+Lead with any idea flagged as crossing the keystone. Keep the whole message
+under ~1500 characters so it fits one Discord message.
+
+Do NOT include `competence`, `labeled_at`, `Leverages`, `One new thing to
+learn`, or `Why it's worth it` in the Discord post — they are either machine
+state or detail for the file, not morning reading.
 
 ## Prompt version — echo it on every run
 
