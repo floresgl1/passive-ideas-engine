@@ -49,18 +49,28 @@ Brainstorm passive-income opportunities that (a) use at least one abstracted
 capability as their core, (b) run with little ongoing effort once built, and
 (c) sit one step beyond what has already shipped — adjacent, not identical.
 
+When the profile's direct extractions are running thin (you are re-angling the
+same projects for the Nth time), shift from supply-side to DEMAND-SIDE
+reasoning: what problems exist in the world right now that these capabilities
+could solve? Think about who has a pain point that this person's proven skills
+address — a different buyer, a different domain, a different packaging — not
+just a different sub-feature of the same project. The tier rules still apply:
+only [strong]/[emerging] capabilities anchor the core, and a [conceptual] area
+can only inspire a [Stretch]. But the IDEAS need not be micro-extractions from
+existing repos. Emit fewer ideas rather than weaker ones — 1–2 strong ideas
+beats 3–4 scraped from exhausted material.
+
 ## Step 3 — Generate & label
-Produce the strongest 3–4 ideas, QUALITY FIRST. Then tag EACH with the single
-category that best fits:
+Produce 1–4 ideas, QUALITY FIRST — fewer strong ideas beat more weak ones.
+Tag EACH with the single category that best fits:
 - [Passive]    earns with minimal ongoing effort after launch
 - [Experience] building it teaches/hardens a valuable capability
 - [Leverage]   reuses an existing strength, fast to ship
 - [Stretch]    ambitious, higher upside; may draw on a [conceptual] area or
                stated direction to reach a not-yet-shipped domain
 
-Aim for a SPREAD of categories when the ideas genuinely support it, but never
-weaken an idea to diversify. If the best ideas cluster in one category, say so
-and note what a strong idea in a missing category would require.
+Pick the best ideas regardless of category. If they all land in the same
+category, that's fine — never weaken an idea to diversify.
 
 ## Filters (apply before finalizing)
 - Achievable in ~2–6 weeks of part-time work at this person's level.
@@ -108,7 +118,6 @@ is load-bearing: other routines read these files mechanically.
 **Leverages:** <which shipped experience it draws on>
 **One new thing to learn:** <the single new thing>
 **Why it's worth it:** <why this is worth the effort>
-**First step today:** <one concrete action to take today>
 ```
 
 The blank line after `- labeled_at: —` is required — without it the fields
@@ -164,11 +173,9 @@ user reads daily, so it must be scannable and concrete:
 
 **[Category]** Idea Name
 <one sentence: what it is>
-→ First step: <concrete action>
 
 **[Category]** Idea Name
 <one sentence: what it is>
-→ First step: <concrete action>
 
 ...
 
@@ -195,4 +202,4 @@ measurement loop rests on. Echoing the marker makes any future divergence
 self-announcing: if a run's marker doesn't match the marker in the repo copy,
 the payload is stale.
 
-<!-- prompt-version: 2026-08-14.1 -->
+<!-- prompt-version: 2026-09-09.1 -->
