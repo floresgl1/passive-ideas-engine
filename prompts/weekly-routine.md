@@ -15,7 +15,7 @@
 > any other branch, PART A will see an empty `ideas/` folder and the loop breaks.
 
 > **WRITE SCOPE (critical):** The only files you may write are `profile.md`,
-> `career-log.md`, `quiz-queue.json`, and a GitHub issue. You must NEVER modify,
+> `career-log.md`, and `quiz-queue.json`. You must NEVER modify,
 > rewrite, or reformat any file in `ideas/`. Those files carry quiz results
 > written by another routine; editing them destroys measurements that cannot be
 > recovered. `quiz-queue.json` is the one exception added later: it is a DERIVED
@@ -41,7 +41,6 @@ The daily routine emits every idea in exactly this shape:
 **Leverages:** ...
 **One new thing to learn:** ...
 **Why it's worth it:** ...
-**First step today:** ...
 **Keystone:** crosses the keystone — ...   (present only when true)
 ```
 
@@ -94,45 +93,22 @@ A cluster you know nothing about can absolutely win. Report competence in A4;
 never rank by it.
 
 ### A4 — Act
+Do NOT open a GitHub issue. The winner (or "no winner") goes into the Discord
+post only.
+
 IF a cluster clears the bar:
-  Open ONE GitHub issue in this repo (exactly one — ruthless singularity is the
-  point). Title: "This week's build: <short name>". Body includes: which
-  capability it leverages, how many distinct days it recurred (list the dates),
-  why it won, whether it crosses the keystone, and the single concrete first
-  step to take.
-
-  Add a **"What you know about this"** line reporting the `competence` values
-  across the ideas in the winning cluster — e.g. "2 of 3 unlabeled, 1 needs
-  work". This is context for the reader, not a judgment. If EVERY idea in the
-  winning cluster is `unlabeled`, say so plainly: "This week's winner was picked
-  with no readiness information — none of these ideas have been quizzed yet."
-
-  Then add a **"Suggested starting point"** section to the issue body — a
-  scaffold TAILORED to THIS specific winner (not a generic template), derived
-  from its concrete first step. Include:
-    - a proposed minimal folder/file layout for just the first step (a few
-      files, not a whole architecture), and
-    - the first 2–3 shell commands to stand it up (e.g. mkdir, git init if a
-      new repo, touch the starter files).
-  Frame it explicitly as a SUGGESTION, with a line like: "Starting point only —
-  adjust the structure to however you'd rather architect it." Keep it minimal:
-  the goal is to lower activation energy for the first step, NOT to design the
-  whole project or presume the architecture. If the first step is genuinely
-  non-code (e.g. "pick a target vertical"), skip the scaffold and just state
-  the decision to make.
-
-  If the winning cluster is `unlabeled` or `no knowledge`, append one line to
-  the scaffold: "Note: this scaffold assumes an understanding of the idea that
-  hasn't been verified yet — consider quizzing it first."
+  Record it as this week's build winner. Note: which capability it leverages,
+  how many distinct days it recurred (list the dates), why it won, and whether
+  it crosses the keystone. Include the competence context — e.g. "2 of 3
+  unlabeled, 1 needs work". If EVERY idea in the winning cluster is `unlabeled`,
+  note that plainly.
 IF NO cluster clears the bar:
-  Open NO issue. Instead note "No clear winner this week" and list the top 2–3
-  clusters with their day counts, so the shortlist is visible without forcing a
-  mediocre build.
+  Record "No clear winner this week" and note the top 2–3 clusters with their
+  day counts.
 
-Carry the PART A result (issue opened + title, or "no winner") into the Discord
-post at the end.
+Carry the result into the Discord post at the end.
 
-### A7 — Stock the quiz queue
+### A5 — Stock the quiz queue
 
 You have just done the expensive part — clustering the week by concept and
 counting distinct days. The quiz queue is a by-product of that work, so build it
@@ -420,26 +396,30 @@ delivered. If the POST fails or returns anything else, say so explicitly in your
 run summary and include the status code — this routine runs unattended, so a
 post you assumed went out and never did is a silent failure.
 
-Structure it in two short sections:
+Format the ideas-channel post in EXACTLY this shape — this is the only weekly
+output the user reads, so it must be scannable:
 
-**This week's build** (from PART A):
-- If an issue was opened: the title, the winning capability, and how many days
-  it recurred. Lead with it if it crosses the keystone. Include the one-line
-  competence context.
-- If not: "No clear winner this week" + the top 2–3 clusters and day counts.
+```
+**📋 Weekly — YYYY-MM-DD**
 
-**Profile refresh** (from PART B):
-- What changed, what tier each change landed in, any graduations (especially a
-  hardware line moving [conceptual] → [strong], called out clearly), and any
-  duplicates collapsed. If nothing substantive changed, say exactly that.
-- **Career log** — the NUMBER of records appended to `career-log.md`, and each
-  transition named, or the words "no records appended".
+**This week's build:**
+<winner title + capability + day count, or "No clear winner" + top 2–3 clusters>
 
-  This count must match the shipped-tier movements and graduations you just
-  reported. If it does not, say so plainly in the post rather than reconciling
-  it silently. A mismatch between what you flagged and what you logged is the
-  one discrepancy that must never pass unnoticed — this routine runs unattended,
-  so a failure that stays quiet is a failure that persists.
+**Profile refresh:**
+<what changed and at which tier, or "No substantive change">
+Career log: <N records appended (name each transition), or "no records">
+
+<!-- prompt-version: XXXX-XX-XX.X -->
+```
+
+If an issue was opened, lead with its title and the winning capability. Lead
+with it if it crosses the keystone. Include the one-line competence context.
+If no winner: list the top 2–3 clusters with their day counts.
+
+The career-log count must match the shipped-tier movements you reported. If it
+does not, say so plainly in the post rather than reconciling silently — this
+routine runs unattended, so a failure that stays quiet is a failure that
+persists.
 
 Keep the whole message readable in one Discord message. Do NOT include queue
 counts here — those go to the quiz channel.
@@ -481,4 +461,4 @@ found by reading both side by side. Echoing the marker makes any future
 divergence self-announcing: if a run's marker doesn't match the marker in the
 repo copy, the payload is stale. No audit required to notice.
 
-<!-- prompt-version: 2026-08-10.1 -->
+<!-- prompt-version: 2026-09-09.2 -->
