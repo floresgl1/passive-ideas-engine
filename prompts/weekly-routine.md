@@ -15,7 +15,7 @@
 > any other branch, PART A will see an empty `ideas/` folder and the loop breaks.
 
 > **WRITE SCOPE (critical):** The only files you may write are `profile.md`,
-> `career-log.md`, `quiz-queue.json`, and a GitHub issue. You must NEVER modify,
+> `career-log.md`, and `quiz-queue.json`. You must NEVER modify,
 > rewrite, or reformat any file in `ideas/`. Those files carry quiz results
 > written by another routine; editing them destroys measurements that cannot be
 > recovered. `quiz-queue.json` is the one exception added later: it is a DERIVED
@@ -93,43 +93,20 @@ A cluster you know nothing about can absolutely win. Report competence in A4;
 never rank by it.
 
 ### A4 — Act
+Do NOT open a GitHub issue. The winner (or "no winner") goes into the Discord
+post only.
+
 IF a cluster clears the bar:
-  Open ONE GitHub issue in this repo (exactly one — ruthless singularity is the
-  point). Title: "This week's build: <short name>". Body includes: which
-  capability it leverages, how many distinct days it recurred (list the dates),
-  why it won, whether it crosses the keystone, and the single concrete first
-  step to take.
-
-  Add a **"What you know about this"** line reporting the `competence` values
-  across the ideas in the winning cluster — e.g. "2 of 3 unlabeled, 1 needs
-  work". This is context for the reader, not a judgment. If EVERY idea in the
-  winning cluster is `unlabeled`, say so plainly: "This week's winner was picked
-  with no readiness information — none of these ideas have been quizzed yet."
-
-  Then add a **"Suggested starting point"** section to the issue body — a
-  scaffold TAILORED to THIS specific winner (not a generic template), derived
-  from its concrete first step. Include:
-    - a proposed minimal folder/file layout for just the first step (a few
-      files, not a whole architecture), and
-    - the first 2–3 shell commands to stand it up (e.g. mkdir, git init if a
-      new repo, touch the starter files).
-  Frame it explicitly as a SUGGESTION, with a line like: "Starting point only —
-  adjust the structure to however you'd rather architect it." Keep it minimal:
-  the goal is to lower activation energy for the first step, NOT to design the
-  whole project or presume the architecture. If the first step is genuinely
-  non-code (e.g. "pick a target vertical"), skip the scaffold and just state
-  the decision to make.
-
-  If the winning cluster is `unlabeled` or `no knowledge`, append one line to
-  the scaffold: "Note: this scaffold assumes an understanding of the idea that
-  hasn't been verified yet — consider quizzing it first."
+  Record it as this week's build winner. Note: which capability it leverages,
+  how many distinct days it recurred (list the dates), why it won, and whether
+  it crosses the keystone. Include the competence context — e.g. "2 of 3
+  unlabeled, 1 needs work". If EVERY idea in the winning cluster is `unlabeled`,
+  note that plainly.
 IF NO cluster clears the bar:
-  Open NO issue. Instead note "No clear winner this week" and list the top 2–3
-  clusters with their day counts, so the shortlist is visible without forcing a
-  mediocre build.
+  Record "No clear winner this week" and note the top 2–3 clusters with their
+  day counts.
 
-Carry the PART A result (issue opened + title, or "no winner") into the Discord
-post at the end.
+Carry the result into the Discord post at the end.
 
 ### A5 — Stock the quiz queue
 
@@ -484,4 +461,4 @@ found by reading both side by side. Echoing the marker makes any future
 divergence self-announcing: if a run's marker doesn't match the marker in the
 repo copy, the payload is stale. No audit required to notice.
 
-<!-- prompt-version: 2026-09-09.1 -->
+<!-- prompt-version: 2026-09-09.2 -->
