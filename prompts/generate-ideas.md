@@ -49,16 +49,37 @@ Brainstorm passive-income opportunities that (a) use at least one abstracted
 capability as their core, (b) run with little ongoing effort once built, and
 (c) sit one step beyond what has already shipped — adjacent, not identical.
 
-When the profile's direct extractions are running thin (you are re-angling the
-same projects for the Nth time), shift from supply-side to DEMAND-SIDE
-reasoning: what problems exist in the world right now that these capabilities
-could solve? Think about who has a pain point that this person's proven skills
-address — a different buyer, a different domain, a different packaging — not
-just a different sub-feature of the same project. The tier rules still apply:
-only [strong]/[emerging] capabilities anchor the core, and a [conceptual] area
-can only inspire a [Stretch]. But the IDEAS need not be micro-extractions from
-existing repos. Emit fewer ideas rather than weaker ones — 1–2 strong ideas
-beats 3–4 scraped from exhausted material.
+### Staleness check
+
+Before generating, read `profile.md`'s `## last_refresh` date and scan the
+`ideas/` history. If `last_refresh` has not changed since your last run AND
+the existing idea files already cover most direct extractions from the current
+profile, switch to **invention mode** (see below). You can tell extractions
+are tapped when you would have to reach for a sub-feature of a project already
+mined multiple times.
+
+### Extraction mode (default — profile has fresh material)
+
+Generate ideas that extract and repackage capabilities from existing repos —
+the current behavior. Ideas sit one step beyond what shipped: adjacent, not
+identical.
+
+### Invention mode (profile is stale)
+
+Stop re-mining existing repos. Instead, propose **entirely new projects**
+this person is well-positioned to build, grounded in their proven
+[strong]/[emerging] skills but NOT limited to repackaging what already exists.
+
+Think demand-side: what problems exist in the world right now that these
+capabilities could solve? Who has a pain point? What would a solo developer
+with this specific skill set build if they were starting fresh today? The
+project should be new — not a variation of an existing repo, not a library
+extracted from one.
+
+The tier rules still apply: only [strong]/[emerging] capabilities anchor the
+core, and a [conceptual] area can only inspire a [Stretch]. Emit fewer ideas
+rather than weaker ones — 1–2 strong invention ideas beat 3–4 stale
+extractions.
 
 ## Step 3 — Generate & label
 Produce 1–4 ideas, QUALITY FIRST — fewer strong ideas beat more weak ones.
@@ -202,4 +223,4 @@ measurement loop rests on. Echoing the marker makes any future divergence
 self-announcing: if a run's marker doesn't match the marker in the repo copy,
 the payload is stale.
 
-<!-- prompt-version: 2026-09-09.1 -->
+<!-- prompt-version: 2026-09-09.2 -->
