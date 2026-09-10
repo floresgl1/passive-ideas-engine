@@ -298,3 +298,47 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   message) for LLM-backed quiz generation, but the function is not wired
   to any FastAPI route in this window — it exists in code but is not
   reachable, so it is not counted as demonstrated capability here.
+
+## 2026-09-10 — finance_bot (champion/challenger retraining pipeline)
+- axis: MLOps / automated model lifecycle management
+- transition: — → [emerging]
+- artifact: finance_bot (`promote_model.py`, `retrain.yml`, `live_benchmark.py`,
+  `pnl_report.py`, `reconcile_stops.py`)
+- evidence: Python, GitHub Actions. 18 non-merge commits on 2026-09-08 (PRs
+  #1–#5, e.g. `3475b4b`..`db5f3e6`) plus later same-window commits through
+  2026-09-10. `retrain.yml` runs on a real monthly cron (`0 6 1 * *`) plus
+  `workflow_dispatch` with a dry-run input; `promote_model.py`'s
+  `decide_promotion` trains a challenger, evaluates it against the live
+  champion on an identical freshly-built chronological 70/20/10 split (same
+  test slice for both, not separately-reported metrics), and rejects
+  promotion unless the challenger beats the champion by a margin AND beats
+  a buy-and-hold benchmark (`live_benchmark.py`, `1d51d81`/`46d0b25`) AND
+  clears absolute floors — inline `DESIGN DECISION` comments state the gate
+  is deliberately failure-biased ("promotion is the exception that must be
+  argued for, not the default"; ties and thin test sets resolve to REJECT).
+  Closes a real, named operational gap: the live model had gone from
+  2026-03-23 to 2026-09-08 (5+ months) without a retrain because the
+  decision was manual and was never made. Supporting pieces shipped the same
+  window: realized P&L attribution from logged EXIT rows (`pnl_report.py`,
+  `c008be0`), stop-loss-exit reconciliation for fills Alpaca made outside a
+  bot session (`reconcile_stops.py`, `66ce1a6`), and a full CI test gate
+  added for the first time (`tests.yml`, `3475b4b`). **Tests:** 599 pass,
+  independently re-run this session in a fresh venv (`pytest -q`); new/
+  extended suites include `test_promote_model.py` (879 lines),
+  `test_live_benchmark.py` (635), `test_edge_probe.py` (853),
+  `test_pnl_report.py` (436), `test_reconcile_stops.py` (447),
+  `test_capital_allocator.py` (253), `test_live_trader.py` (729),
+  `test_rebalancer.py` (367). **No design doc predates the code** —
+  `docs/PIPELINE.md`'s "Model Retraining & Promotion" and P&L-attribution
+  sections were written after the implementing commits in the same session
+  (`6efd4c6` follows `4f063a8`/`c008be0`), documenting the decision
+  retroactively rather than specifying it first; the gate's own rationale
+  lives only as inline code comments. **Deployment:** live scheduled
+  automation against the real paper-trading account's data (GitHub Actions
+  cron, not a one-off script) — but the account itself is paper trading,
+  no real capital, no external users. Distinct from the already-`[strong]`
+  "Supervised ML on time series" skill (a training-methodology discipline)
+  and from "Production observability" (monitoring an already-running
+  system) — this is the automation that closes the loop between the two:
+  retrain, evaluate against a real economic benchmark, and gate promotion,
+  on a schedule, without a human in the loop.

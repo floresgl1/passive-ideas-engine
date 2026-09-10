@@ -62,6 +62,15 @@
       "queued_at": "2026-09-04",
       "expires_at": "2026-09-25",
       "status": "pending"
+    },
+    {
+      "idea_file": "ideas/2026-09-08.md",
+      "idea_heading": "### 2. PDF Knowledge-Base API — [Passive]",
+      "idea_name": "PDF Knowledge-Base API",
+      "recurred_days": 2,
+      "queued_at": "2026-09-10",
+      "expires_at": "2026-10-01",
+      "status": "pending"
     }
   ]
 }
