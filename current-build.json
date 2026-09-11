@@ -1,8 +1,9 @@
 {
-  "active": false,
-  "name": "",
-  "picked_at": "",
-  "cluster_days": 0,
-  "status": "none",
+  "active": true,
+  "name": "AI Ops Sub-Agent Template Pack",
+  "picked_at": "2026-09-11",
+  "cluster_days": 2,
+  "status": "building",
+  "repo": "",
   "history": []
 }
