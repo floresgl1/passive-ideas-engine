@@ -413,7 +413,9 @@ output the user reads, so it must be scannable:
 ```
 **📋 Weekly — YYYY-MM-DD**
 
-**This week's build:**
+**🔨 Building:** <name> — week <N> (started <date>)
+
+**Winner:**
 <winner title + capability + day count, or "No clear winner" + top 2–3 clusters>
 
 **Profile refresh:**
@@ -421,9 +423,19 @@ output the user reads, so it must be scannable:
 Career log: <N records appended (name each transition), or "no records">
 ```
 
-Lead
-with it if it crosses the keystone. Include the one-line competence context.
-If no winner: list the top 2–3 clusters with their day counts.
+**The 🔨 Building line** is present ONLY when `current-build.json` has
+`"active": true`. Compute the week number as the count of full weeks since
+`picked_at` (week 1 = days 0–6, week 2 = days 7–13, etc.). Omit the line
+entirely when there is no active build — do not print "No active build."
+
+If the build has been active for **4 or more weeks**, change the line to:
+`**🔨 Building:** <name> — ⏰ week <N> — still building, or time to close it out?`
+
+If an active build exists and Part A found a new winner, note the winner as
+**"Next up"** rather than the primary heading — the active build takes priority.
+
+Lead with the winner if it crosses the keystone. Include the one-line competence
+context. If no winner: list the top 2–3 clusters with their day counts.
 
 The career-log count must match the shipped-tier movements you reported. If it
 does not, say so plainly in the post rather than reconciling silently — this
