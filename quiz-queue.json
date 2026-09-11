@@ -71,6 +71,24 @@
       "queued_at": "2026-09-10",
       "expires_at": "2026-10-01",
       "status": "pending"
+    },
+    {
+      "idea_file": "ideas/2026-09-06.md",
+      "idea_heading": "### 2. Boundary-Condition Fuzzer — [Passive]",
+      "idea_name": "Boundary-Condition Fuzzer",
+      "recurred_days": 2,
+      "queued_at": "2026-09-11",
+      "expires_at": "2026-10-02",
+      "status": "pending"
+    },
+    {
+      "idea_file": "ideas/2026-09-08.md",
+      "idea_heading": "### 3. Multi-Model Quiz-Quality Benchmark — [Stretch]",
+      "idea_name": "Multi-Model Quiz-Quality Benchmark",
+      "recurred_days": 2,
+      "queued_at": "2026-09-11",
+      "expires_at": "2026-10-02",
+      "status": "pending"
     }
   ]
 }
