@@ -1,9 +1,6 @@
-<!-- SOURCE OF TRUTH: this file is the DRAFTING SURFACE for the "Ideas - Weekly"
-     trigger (trig_01KGvdWC64aUgmam9Y4uxs4U, cron `0 17 * * 0`). The trigger
-     payload is what actually RUNS. Edit here first, then paste across, and bump
-     the prompt-version marker at the foot in the same change.
-     Reconciled from the live payload on 2026-08-04, after the two copies had
-     drifted apart unnoticed: this file had lost PART A, Step 0.5, and PART C. -->
+<!-- This file is the single source of truth for the Ideas - Weekly trigger.
+     The trigger payload reads this file at runtime — edits here take effect
+     on the next run with no manual paste step. -->
 
 # Weekly Sunday Routine — Pick the Winner, then Refresh the Profile
 
@@ -15,7 +12,7 @@
 > any other branch, PART A will see an empty `ideas/` folder and the loop breaks.
 
 > **WRITE SCOPE (critical):** The only files you may write are `profile.md`,
-> `career-log.md`, and `quiz-queue.json`. You must NEVER modify,
+> `career-log.md`, `quiz-queue.json`, and `current-build.json`. You must NEVER modify,
 > rewrite, or reformat any file in `ideas/`. Those files carry quiz results
 > written by another routine; editing them destroys measurements that cannot be
 > recovered. `quiz-queue.json` is the one exception added later: it is a DERIVED
@@ -92,9 +89,9 @@ and mixing them would corrupt the recurrence signal this whole step rests on.
 A cluster you know nothing about can absolutely win. Report competence in A4;
 never rank by it.
 
-### A4 — Act
-Do NOT open a GitHub issue. The winner (or "no winner") goes into the Discord
-post only.
+### A4 — Act and update current-build.json
+
+Read `current-build.json` first.
 
 IF a cluster clears the bar:
   Record it as this week's build winner. Note: which capability it leverages,
@@ -102,11 +99,25 @@ IF a cluster clears the bar:
   it crosses the keystone. Include the competence context — e.g. "2 of 3
   unlabeled, 1 needs work". If EVERY idea in the winning cluster is `unlabeled`,
   note that plainly.
+
+  Then update `current-build.json`:
+  - If `"active": false` (no current build), write the winner in:
+    `"active": true`, `"name": "<winner name>"`, `"picked_at": "YYYY-MM-DD"`,
+    `"cluster_days": <count>`, `"status": "picked"`.
+  - If `"active": true` (user is already building something), do NOT overwrite
+    their current build. Instead, note the new winner in the Discord post as
+    "Next up" — the user decides when to switch. Append the skipped winner to
+    the `"history"` array: `{"name": "<name>", "picked_at": "YYYY-MM-DD",
+    "cluster_days": <count>, "outcome": "deferred"}`.
+
 IF NO cluster clears the bar:
   Record "No clear winner this week" and note the top 2–3 clusters with their
-  day counts.
+  day counts. Do not change `current-build.json`.
 
 Carry the result into the Discord post at the end.
+
+Commit `current-build.json` alongside `profile.md` and `quiz-queue.json` in
+the Step 5 commit.
 
 ### A5 — Stock the quiz queue
 
@@ -408,11 +419,9 @@ output the user reads, so it must be scannable:
 **Profile refresh:**
 <what changed and at which tier, or "No substantive change">
 Career log: <N records appended (name each transition), or "no records">
-
-<!-- prompt-version: XXXX-XX-XX.X -->
 ```
 
-If an issue was opened, lead with its title and the winning capability. Lead
+Lead
 with it if it crosses the keystone. Include the one-line competence context.
 If no winner: list the top 2–3 clusters with their day counts.
 
@@ -447,18 +456,3 @@ routine's job. This post is status only.
 
 Also commit the updated profile.md as described in PART B Step 5.
 
-================================================================
-## Prompt version — echo it on every run
-================================================================
-
-Include the `prompt-version` marker from the foot of this prompt, verbatim, as
-the LAST line of Post 1 (ideas channel), and append it to the `profile.md`
-commit message.
-
-The repo keeps this prompt at `prompts/weekly-routine.md`. That copy and the
-running payload have already drifted apart once, silently, and the gap was only
-found by reading both side by side. Echoing the marker makes any future
-divergence self-announcing: if a run's marker doesn't match the marker in the
-repo copy, the payload is stale. No audit required to notice.
-
-<!-- prompt-version: 2026-09-09.2 -->

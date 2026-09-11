@@ -1,22 +1,6 @@
-<!-- SOURCE OF TRUTH: this file is the DRAFTING SURFACE for the "Ideas - Daily"
-     trigger (trig_01GjT4QKbd58cWMJt8DDQWMa, cron `0 14 * * *`). The trigger
-     payload is what actually RUNS. Edit here first, then paste across, and bump
-     the prompt-version marker at the foot in the same change.
-     Reconciled from the live payload on 2026-08-04, after the two copies had
-     drifted apart unnoticed: this file had lost the branch rule, the commit
-     step, the required per-idea format, and the competence prohibition.
-     Drifted again by 2026-08-14, in the other direction: the payload lacked
-     the prompt-version-echo section below. RESOLVED 2026-08-16 — this file and
-     prompts/weekly-routine.md were both pasted across, and the live payloads
-     were then read back and verified identical to their repo copies. No known
-     drift in either prompt.
-     One note on discipline: comment-only corrections to this header do not bump
-     the marker, so the two copies stay matched and no false drift signal fires.
-     The marker tracks behavioral drift, not prose.
-     Keep this header's claims durable — state rules, never the state of a
-     pending task. Twice now a note describing a transient condition ("not yet
-     pasted across") outlived the condition and became the only false thing in
-     the file, which is exactly what a run reading this header cannot afford. -->
+<!-- This file is the single source of truth for the Ideas - Mon/Thu trigger.
+     The trigger payload reads this file at runtime — edits here take effect
+     on the next run with no manual paste step. -->
 
 # Daily Idea Engine
 
@@ -80,6 +64,22 @@ The tier rules still apply: only [strong]/[emerging] capabilities anchor the
 core, and a [conceptual] area can only inspire a [Stretch]. Emit fewer ideas
 rather than weaker ones — 1–2 strong invention ideas beat 3–4 stale
 extractions.
+
+## Current build awareness
+
+Read `current-build.json` in this repo. If `"active": true`, the user is
+currently building the project named in `"name"`. Adapt your output:
+
+- **Do NOT generate ideas that compete with or duplicate the current build.**
+  The user already picked one — don't make them second-guess it.
+- **DO generate ideas that complement it** — adjacent features, tools that
+  would help the build, packaging angles for the thing being built, or ideas
+  in a completely different domain that offer variety. The current build is
+  context, not a constraint on topic.
+- Note the active build in the Discord post with one line at the top:
+  `🔨 Building: <name>` so the user sees their focus reflected.
+
+If `"active": false`, ignore this section and generate normally.
 
 ## Step 3 — Generate & label
 Produce 1–4 ideas, QUALITY FIRST — fewer strong ideas beat more weak ones.
@@ -199,8 +199,6 @@ user reads daily, so it must be scannable and concrete:
 <one sentence: what it is>
 
 ...
-
-<!-- prompt-version: XXXX-XX-XX.X -->
 ```
 
 Lead with any idea flagged as crossing the keystone. Keep the whole message
@@ -210,17 +208,3 @@ Do NOT include `competence`, `labeled_at`, `Leverages`, `One new thing to
 learn`, or `Why it's worth it` in the Discord post — they are either machine
 state or detail for the file, not morning reading.
 
-## Prompt version — echo it on every run
-
-Append the `prompt-version` marker from the foot of this prompt, verbatim, to
-the commit message for the dated ideas file, and as the last line of the
-Discord post.
-
-The repo keeps this prompt at `prompts/generate-ideas.md`. That copy and the
-running payload have already drifted apart once, silently — the repo copy had
-lost this entire section on competence, which is the prohibition the whole
-measurement loop rests on. Echoing the marker makes any future divergence
-self-announcing: if a run's marker doesn't match the marker in the repo copy,
-the payload is stale.
-
-<!-- prompt-version: 2026-09-09.2 -->
