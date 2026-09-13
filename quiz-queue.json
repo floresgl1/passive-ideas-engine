@@ -25,7 +25,7 @@
       "recurred_days": 2,
       "queued_at": "2026-08-21",
       "expires_at": "2026-09-11",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "idea_file": "ideas/2026-08-20.md",
@@ -34,7 +34,7 @@
       "recurred_days": 2,
       "queued_at": "2026-08-21",
       "expires_at": "2026-09-11",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "idea_file": "ideas/2026-08-28.md",
