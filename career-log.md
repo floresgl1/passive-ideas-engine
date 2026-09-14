@@ -342,3 +342,39 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   system) — this is the automation that closes the loop between the two:
   retrain, evaluate against a real economic benchmark, and gate promotion,
   on a schedule, without a human in the loop.
+
+## 2026-09-14 — ops-subagent-templates (AI Ops Sub-Agent Template Pack)
+- axis: templated productization of internal tooling
+- transition: — → [emerging]
+- artifact: ops-subagent-templates
+- evidence: Python + YAML + GitHub Actions + a Claude Code sub-agent
+  definition. 10 non-merge commits across 2 merged PRs, 2026-09-11
+  (`32524ba`, design-doc seed) through 2026-09-14 (`7de061b`). ~963 total
+  lines: `docs/DESIGN.md` (92), `docs/REQUIREMENTS.md` (81), `README.md`
+  (253), `health-snapshot.py` (275), `triage-config.yaml` (81),
+  `.claude/agents/daily-triage.md` (88), `.github/workflows/triage.yml`
+  (92), `requirements.txt` (1). **Design doc first:** `docs/DESIGN.md`'s
+  Architecture/MVP-scope/acceptance-criteria section (`60f9990`,
+  2026-09-14 20:54:40 UTC) and `docs/REQUIREMENTS.md` (`59e8e1d`,
+  20:55:58 UTC) both landed before any implementing file that same
+  session — `triage-config.yaml` (21:02:46), `health-snapshot.py`
+  (21:05:22), `.claude/agents/daily-triage.md` (21:09:30), and
+  `triage.yml` (21:11:34) all came after. `health-snapshot.py` ships
+  three real, runnable checks (output-file existence, scheduled-task
+  exit-code, cross-check invariant), config-driven from
+  `triage-config.yaml`; the sub-agent is tool-scoped to
+  Bash/Read/Grep/Glob with an explicit "you MUST NOT modify files, run
+  mutating commands, or call write APIs — report only" hard rule,
+  mirroring finance_bot's already-proven `daily-run-triage` pattern (and
+  golf's own sub-agents) — but generalized here for someone else's
+  system rather than the author's own. **No tests:** no test file or
+  test directory exists anywhere in the repo. **No CI verification of
+  the product itself:** the `triage.yml` workflow (cron `30 20 * * *`
+  plus `workflow_dispatch`) has not been observed to run — nothing in
+  the commit history confirms the cron has fired or that a verdict was
+  ever actually posted to a webhook. **No deployment/users:** the README
+  targets Gumroad zip distribution, but there is no evidence of a sale,
+  a buyer, or the template running against a real third-party system.
+  First shipped instance of packaging an already-`[strong]`
+  internal-tooling pattern as a generalized artifact for someone else to
+  install and run — distinct from using the pattern on one's own repo.
