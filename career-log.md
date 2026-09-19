@@ -378,3 +378,70 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   First shipped instance of packaging an already-`[strong]`
   internal-tooling pattern as a generalized artifact for someone else to
   install and run — distinct from using the pattern on one's own repo.
+
+## 2026-09-19 — voice-quiz + studyprof (document/content ingestion)
+- axis: document / content ingestion for LLM pipelines
+- transition: [emerging] → [strong]
+- artifact: voice-quiz (`extraction.py`, `github.py`, `youtube.py`,
+  `claude_client.py`); studyprof (prior instance)
+- evidence: Python, PyMuPDF, python-docx, `httpx`, `youtube_transcript_api`.
+  studyprof (2026-09-01/03) shipped the first instance of this skill:
+  PDF-only extraction via PyMuPDF, wired to `POST /upload/` but its
+  downstream LLM-generation call (`generate_question()`) was never
+  reachable from any route. voice-quiz (21 non-merge commits, 3 merged
+  PRs, 2026-09-17 20:01 UTC–2026-09-19 01:26 UTC) ships a second,
+  broader instance: local file upload for both PDF and DOCX
+  (`extraction.py`), a live GitHub-repo crawl (`github.py` — recursive
+  git-tree fetch via GitHub's REST API, per-file raw-content fetch
+  capped at 50KB/file and 100KB total, an extension allowlist and
+  directory excludelist), and a live YouTube transcript fetch
+  (`youtube.py`, `youtube_transcript_api`, regex video-ID extraction) —
+  all three paths wired end to end into a working call
+  (`generate_questions` in `claude_client.py`), unlike studyprof's
+  dead-end route. Demonstrated across two repos, and fully wired
+  (not just reachable) in the second — the basis for promoting to
+  `[strong]`. **No tests:** neither repo has an automated test
+  covering extraction correctness in either PDF, DOCX, GitHub, or
+  YouTube paths. **No deployment:** voice-quiz is local dev only, no
+  users.
+
+## 2026-09-19 — voice-quiz (browser-based voice interaction)
+- axis: human-voice I/O for a web application
+- transition: — → [emerging]
+- artifact: voice-quiz (`index.html`)
+- evidence: JavaScript, browser Web Speech API (`SpeechSynthesis` for
+  output, `SpeechRecognition` for input) — no server-side speech
+  processing. First shipped instance of a voice-driven interaction
+  anywhere in the profile. Question text is read aloud via TTS,
+  including a math-to-speech/LaTeX-escape conversion pass added
+  2026-09-19 (`32480ff`) so spoken math doesn't read out raw LaTeX
+  markup; spoken answers are captured via STT, with a typed-answer
+  fallback added 2026-09-17 (`fa681aa`) for when STT or the network
+  fails. **Constraint:** Chrome-only, documented as a known limitation
+  in the repo's own `CLAUDE.md` (Web Speech API requirement). **No
+  tests:** the repo has no test suite of any kind. **No deployment:**
+  local dev only, no users.
+
+## 2026-09-19 — voice-quiz (LLM-as-judge structured grading/generation)
+- axis: LLM integration — structured evaluation and generation, not
+  agentic
+- transition: — → [emerging]
+- artifact: voice-quiz (`claude_client.py`, `prompts.py`)
+- evidence: Python, Anthropic SDK, model `claude-sonnet-5` (default,
+  overridable via `CLAUDE_MODEL`). Two structured, single-turn LLM
+  jobs, both genuinely distinct in shape from every existing LLM entry
+  in this profile — finance_bot's bounded-ReAct agent loop (acts on a
+  live system) and poker-llm's multi-model game-playing harness (plays
+  a game): (1) `generate_questions`/`generate_choices` turn arbitrary
+  source text into constrained-JSON quiz questions and multiple-choice
+  distractors; (2) `grade_answer` judges a free-text or
+  voice-transcribed answer against an expected answer under an
+  explicit `judgment`/`score`/`explanation` schema, with the grading
+  prompt instructed to be lenient toward speech-transcription
+  artifacts. `_parse_json()` tolerates both raw JSON and
+  markdown-fenced responses. A third mode, `explain_concept`, produces
+  free-text teaching explanations rather than JSON. First shipped
+  "LLM as evaluator/judge over open-ended input" pattern in the
+  profile. **No tests:** grading accuracy and the claimed leniency
+  behavior are unverified — no test exercises `grade_answer` against
+  any input, transcribed or otherwise.

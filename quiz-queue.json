@@ -89,6 +89,15 @@
       "queued_at": "2026-09-11",
       "expires_at": "2026-10-02",
       "status": "pending"
+    },
+    {
+      "idea_file": "ideas/2026-09-17.md",
+      "idea_heading": "### 2. Agent Contract Tests (pytest plugin) — [Leverage]",
+      "idea_name": "Agent Contract Tests (pytest plugin)",
+      "recurred_days": 2,
+      "queued_at": "2026-09-19",
+      "expires_at": "2026-10-10",
+      "status": "pending"
     }
   ]
 }
