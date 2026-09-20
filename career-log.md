@@ -445,3 +445,33 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   profile. **No tests:** grading accuracy and the claimed leniency
   behavior are unverified — no test exercises `grade_answer` against
   any input, transcribed or otherwise.
+
+## 2026-09-19 — voice-quiz (self-hosted Whisper transcription)
+- axis: self-hosted ML inference serving
+- transition: — → [emerging]
+- artifact: voice-quiz (`transcribe.py`, `Dockerfile`, `render.yaml`)
+- evidence: Python, `faster-whisper>=1.0.0` (CPU, int8 compute type,
+  `base` model, size overridable via `WHISPER_MODEL`). Commit
+  `c3b83ef` (2026-09-19 04:14:51 UTC) replaces browser
+  `SpeechRecognition` with server-side transcription: the browser
+  captures audio via `MediaRecorder` and POSTs it (as `webm`/`wav`/
+  `m4a`/`ogg`, content-type sniffed) to a new `POST /transcribe`
+  endpoint, which writes it to a temp file and runs it through a
+  lazily-loaded, process-lifetime-cached Whisper model
+  (`transcribe.py`, 41 lines). The `Dockerfile` pre-downloads the
+  model at build time specifically so the first live request doesn't
+  pay the download cost, and `render.yaml` provisions a persistent
+  disk (`/data`) for both the SQLite DB and the Whisper/HuggingFace
+  model cache. This removes the Chrome-only STT constraint the prior
+  `[emerging]` "Browser-based voice interaction" entry (same date)
+  had flagged — TTS via browser `SpeechSynthesis` is unchanged. First
+  shipped instance anywhere in this profile of running a downloaded
+  ML model inside the app's own backend rather than calling a hosted
+  API (distinct from visual-search-engine's CLIP/ChromaDB entry,
+  which is embedding retrieval, not ASR, and distinct from
+  finance_bot/poker-llm's LLM-API-only integrations). **No tests:**
+  transcription accuracy is unverified — no test exercises
+  `transcribe_audio` against any audio input. **No deployment:**
+  `render.yaml`/`Dockerfile` are deployment configuration only; no
+  evidence of a live Render deployment or real traffic — "not
+  deployed, no users" still holds.
