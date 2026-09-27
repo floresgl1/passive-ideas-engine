@@ -475,3 +475,32 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   `render.yaml`/`Dockerfile` are deployment configuration only; no
   evidence of a live Render deployment or real traffic — "not
   deployed, no users" still holds.
+
+## 2026-09-22 — voice-quiz (SVG diagram sanitization)
+- axis: untrusted-content sanitization
+- transition: — → [emerging]
+- artifact: voice-quiz (`svg_sanitize.py`)
+- evidence: Python, stdlib only (`xml.etree.ElementTree`, `re`), no new
+  runtime dependency. Commit `6c82e6d` (2026-09-22). 130-line
+  whitelist-based sanitizer: parses model-generated SVG circuit
+  diagrams and rebuilds every element from an explicit allowlist (17
+  tags, 50 attributes) rather than blacklisting or regex-stripping, so
+  anything not on the list (scripts, event handlers, `foreignObject`,
+  external references) is silently dropped on rebuild.
+  `href`/`marker-start`/`marker-mid`/`marker-end`/`fill`/`stroke`
+  attribute values are restricted to same-document local references
+  only (a compiled regex accepts only `#id` or `url(#id)`, so
+  `javascript:`, `data:`, and cross-document URIs are refused).
+  Handles real model-output shapes: strips a wrapping markdown code
+  fence (```svg/xml/html```) before parsing, enforces a 60KB size cap,
+  and rejects malformed XML outright (`ET.ParseError` → `None`) rather
+  than handing the frontend half-broken markup. Wired end to end into
+  the question pipeline (`claude_client.py`, `main.py`, `database.py`):
+  a diagram that fails to sanitize, or arrives without a spoken
+  `diagram_alt` description, causes the question to be used text-only
+  rather than failing the request. **No tests:** no test exercises
+  `sanitize_svg` against a crafted malicious or malformed SVG payload —
+  the whitelist logic is unverified by anything but manual/inline use.
+  **No design artifact:** no design doc predates the commit. **No
+  deployment:** not deployed, no users, consistent with the rest of
+  the repo.

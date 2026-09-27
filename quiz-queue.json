@@ -43,7 +43,7 @@
       "recurred_days": 2,
       "queued_at": "2026-08-30",
       "expires_at": "2026-09-20",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "idea_file": "ideas/2026-09-02.md",
@@ -52,7 +52,7 @@
       "recurred_days": 2,
       "queued_at": "2026-09-04",
       "expires_at": "2026-09-25",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "idea_file": "ideas/2026-09-04.md",
@@ -61,7 +61,7 @@
       "recurred_days": 2,
       "queued_at": "2026-09-04",
       "expires_at": "2026-09-25",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "idea_file": "ideas/2026-09-08.md",
