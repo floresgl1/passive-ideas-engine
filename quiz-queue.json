@@ -2,7 +2,7 @@
   "entries": [
     {
       "idea_file": "ideas/2026-08-11.md",
-      "idea_heading": "### 4. Bounded Risk-Escalation Agent Template — [Stretch]",
+      "idea_heading": "### 4. Bounded Risk-Escalation Agent Template \u2014 [Stretch]",
       "idea_name": "Bounded Risk-Escalation Agent Template",
       "recurred_days": 3,
       "queued_at": "2026-08-13",
@@ -11,7 +11,7 @@
     },
     {
       "idea_file": "ideas/2026-08-14.md",
-      "idea_heading": "### 3. Dependent-Source SPICE CLI — [Experience]",
+      "idea_heading": "### 3. Dependent-Source SPICE CLI \u2014 [Experience]",
       "idea_name": "Dependent-Source SPICE CLI",
       "recurred_days": 2,
       "queued_at": "2026-08-16",
@@ -20,7 +20,7 @@
     },
     {
       "idea_file": "ideas/2026-08-20.md",
-      "idea_heading": "### 1. Netlist-to-Web Circuit Visualizer — [Stretch]",
+      "idea_heading": "### 1. Netlist-to-Web Circuit Visualizer \u2014 [Stretch]",
       "idea_name": "Netlist-to-Web Circuit Visualizer",
       "recurred_days": 2,
       "queued_at": "2026-08-21",
@@ -29,7 +29,7 @@
     },
     {
       "idea_file": "ideas/2026-08-20.md",
-      "idea_heading": "### 2. AI Ops Sub-Agent Template Pack — [Leverage]",
+      "idea_heading": "### 2. AI Ops Sub-Agent Template Pack \u2014 [Leverage]",
       "idea_name": "AI Ops Sub-Agent Template Pack",
       "recurred_days": 2,
       "queued_at": "2026-08-21",
@@ -38,7 +38,7 @@
     },
     {
       "idea_file": "ideas/2026-08-28.md",
-      "idea_heading": "### 1. Bilateral Pose-Orientation Library — [Leverage]",
+      "idea_heading": "### 1. Bilateral Pose-Orientation Library \u2014 [Leverage]",
       "idea_name": "Bilateral Pose-Orientation Library",
       "recurred_days": 2,
       "queued_at": "2026-08-30",
@@ -47,7 +47,7 @@
     },
     {
       "idea_file": "ideas/2026-09-02.md",
-      "idea_heading": "### 2. Engineering-Notation Value Parser — [Passive]",
+      "idea_heading": "### 2. Engineering-Notation Value Parser \u2014 [Passive]",
       "idea_name": "Engineering-Notation Value Parser",
       "recurred_days": 2,
       "queued_at": "2026-09-04",
@@ -56,7 +56,7 @@
     },
     {
       "idea_file": "ideas/2026-09-04.md",
-      "idea_heading": "### 4. RLC Second-Order Extension — [Stretch]",
+      "idea_heading": "### 4. RLC Second-Order Extension \u2014 [Stretch]",
       "idea_name": "RLC Second-Order Extension",
       "recurred_days": 2,
       "queued_at": "2026-09-04",
@@ -65,34 +65,34 @@
     },
     {
       "idea_file": "ideas/2026-09-08.md",
-      "idea_heading": "### 2. PDF Knowledge-Base API — [Passive]",
+      "idea_heading": "### 2. PDF Knowledge-Base API \u2014 [Passive]",
       "idea_name": "PDF Knowledge-Base API",
       "recurred_days": 2,
       "queued_at": "2026-09-10",
       "expires_at": "2026-10-01",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "idea_file": "ideas/2026-09-06.md",
-      "idea_heading": "### 2. Boundary-Condition Fuzzer — [Passive]",
+      "idea_heading": "### 2. Boundary-Condition Fuzzer \u2014 [Passive]",
       "idea_name": "Boundary-Condition Fuzzer",
       "recurred_days": 2,
       "queued_at": "2026-09-11",
       "expires_at": "2026-10-02",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "idea_file": "ideas/2026-09-08.md",
-      "idea_heading": "### 3. Multi-Model Quiz-Quality Benchmark — [Stretch]",
+      "idea_heading": "### 3. Multi-Model Quiz-Quality Benchmark \u2014 [Stretch]",
       "idea_name": "Multi-Model Quiz-Quality Benchmark",
       "recurred_days": 2,
       "queued_at": "2026-09-11",
       "expires_at": "2026-10-02",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "idea_file": "ideas/2026-09-17.md",
-      "idea_heading": "### 2. Agent Contract Tests (pytest plugin) — [Leverage]",
+      "idea_heading": "### 2. Agent Contract Tests (pytest plugin) \u2014 [Leverage]",
       "idea_name": "Agent Contract Tests (pytest plugin)",
       "recurred_days": 2,
       "queued_at": "2026-09-19",
