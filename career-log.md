@@ -504,3 +504,9 @@ noted inline in `profile.md`'s Skills section, and their history is in git.
   **No design artifact:** no design doc predates the commit. **No
   deployment:** not deployed, no users, consistent with the rest of
   the repo.
+
+## 2026-10-18 — profit_engine_research
+- axis: quantitative / market-microstructure research
+- transition: — → [emerging]
+- artifact: profit_engine_research
+- evidence: Python 3.11 with uv, src layout, SQLite. 93 commits, 2026-10-03 through 2026-10-14. 606 tests passed when re-run on 2026-10-18 (37 test files, about 4,800 lines of tests against about 5,500 lines of source). Includes a structural test that fails the build on any order endpoint, write method, credential or venue SDK. Design doc `docs/decisions.md` was committed on 2026-10-03, the fourth commit, before most implementation. No CI (no `.github/workflows`). Paper trading only, no real orders by design. No users, no revenue, and no confirmed live deployment: a PythonAnywhere always-on setup is documented but nothing in git shows it running. Own findings (`docs/findings.md`, 2026-10-08): no edge found across 11 approaches; best temperature model skill -0.16 vs the market's Brier score; paper market makers lost 0.73c and 1.02c per contract.
